@@ -1,0 +1,76 @@
+<div id="modal"
+    class="modal-overlay fixed inset-0 z-50 hidden h-full w-full items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+    
+    <div class="relative w-full max-w-2xl overflow-hidden rounded-2xl bg-white shadow-2xl animate-in zoom-in-95 duration-200">
+
+        <div class="bg-primary p-8 text-center relative overflow-hidden">
+            <div class="absolute top-0 right-24 opacity-10 pointer-events-none">
+                <img src="/assets/Letras.png" alt="Letras ArteLu" class="w-auto h-32">
+            </div>
+            
+            <h3 class="text-3xl font-bold text-white mb-2">Clase de prueba por solo 7 REF.</h3>
+            <p class="text-white/90 text-lg">Sé parte de la familia ArteLu</p>
+
+            <button id="closeModal" class="absolute top-4 right-4 text-white/70 hover:text-white hover:bg-white/10 rounded-full p-1 transition-colors cursor-pointer">
+                <span class="material-symbols-outlined text-2xl">X</span>
+            </button>
+        </div>
+
+        <div class="p-8 flex flex-col gap-5">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                    <label class="block text-xs font-bold text-secondary uppercase mb-2">Nombre y Apellido</label>
+                    <input id="nombre"
+                        class="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-sm focus:border-highlight focus:ring-2 focus:ring-highlight/50 outline-none transition-all"
+                        placeholder="Tu nombre completo" type="text" />
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-secondary uppercase mb-2">Número de Teléfono</label>
+                    <input id="telefono"
+                        class="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-sm focus:border-highlight focus:ring-2 focus:ring-highlight/50 outline-none transition-all"
+                        placeholder="0424-123-4567" type="tel" />
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-secondary uppercase mb-2">Correo Electrónico</label>
+                <input id="correo"
+                    class="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-sm focus:border-highlight focus:ring-2 focus:ring-highlight/50 outline-none transition-all"
+                    placeholder="ejemplo@correo.com" type="email" />
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-secondary uppercase mb-2">¿Qué disciplina deseas probar?</label>
+                <div class="relative">
+                    <select id="disciplina" class="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-sm focus:border-highlight focus:ring-2 focus:ring-highlight/50 outline-none appearance-none cursor-pointer">
+                        <option>Telas Aéreas (Jueves 5:30 p.m. a 7:30 p.m.)</option>
+                        <option>Telas Aéreas (Sabado 10:00 a.m. a 12:00 p.m.)</option>
+                        <option>Pole Fitness</option>
+                        <option>Lyra (Viernes 4:00 p.m. a 5:00 p.m.)</option>
+                        <option>Lyra (Sabado 10:00 a.m. a 12:00 p.m.)</option>
+                        <option>Stretching</option>
+                        <option>Aerial Training</option>
+                    </select>
+                    <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500">
+                        <span class="material-symbols-outlined text-sm">🢃</span>
+                    </div>
+                </div>
+            </div>
+
+            
+
+            <button id="btn-agendar-clase"
+                class="mt-4 w-full rounded-xl bg-highlight hover:bg-secondary py-4 text-base font-bold text-white transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                AGENDA TU CLASE AHORA
+            </button>
+            
+            <p class="text-center text-xs text-gray-400">
+                Válido para nuevos estudiantes solamente.
+            </p>
+        </div>
+    </div>
+    
+    <div class="absolute inset-0 -z-10" id="modal-overlay"></div>
+</div>
+
+<script type="module" src="/js/aside.js"></script>

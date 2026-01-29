@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ArteLu | Academia de Deportes Aéreos</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#52054d",
+                        secondary: "#2f328a",
+                        accent: "#bca0dd",
+                        highlight: "#ab5b9f",
+                        lightbg: "#efefdc",
+                        neutralgray: "#d9d9d9",
+                    }
+                }
+            }
+        }
+    </script>
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <link rel="stylesheet" href="/css/styles.css" />
+
+    <link rel="icon" href="/assets/logo.png" type="Logo de ArteLu" />
+</head>
+
+<body
+    class="flex flex-col min-h-screen bg-lightbg text-primary dark:bg-gray-900 dark:text-neutralgray transition-colors duration-500">
+    <%- include ('./partials/navbar.ejs') %>
+        <%- include ('./partials/alert.ejs') %>
+            <div class="container mx-auto px-4 py-8 min-h-screen">
+
+                <div class="mb-8 text-center">
+                    <h1 class="text-3xl font-bold text-primary mb-2">Panel de Administración</h1>
+                    <p class="text-gray-600">Gestiona disciplinas, usuarios y pagos desde un solo lugar.</p>
+                </div>
+
+                <div class="flex flex-wrap justify-center gap-4 mb-8 border-b border-gray-200 pb-4">
+                    <button onclick="cambiarTab('disciplinas')" id="tab-disciplinas"
+                        class="tab-btn px-6 py-2 rounded-lg font-semibold bg-primary text-white shadow-lg transition-all">
+                        <i class="fa-solid fa-person-running mr-2"></i> Disciplinas
+                    </button>
+                    <button onclick="cambiarTab('equipo')" id="tab-equipo"
+                        class="tab-btn px-6 py-2 rounded-lg font-semibold bg-white text-gray-600 hover:bg-gray-100 transition-all border">
+                        <i class="fa-solid fa-chalkboard-user mr-2"></i> Team ArteLu
+                    </button>
+                    <button onclick="cambiarTab('usuarios')" id="tab-usuarios"
+                        class="tab-btn px-6 py-2 rounded-lg font-semibold bg-white text-gray-600 hover:bg-gray-100 transition-all border">
+                        <i class="fa-solid fa-users mr-2"></i> Usuarios
+                    </button>
+                    <button onclick="cambiarTab('pagos')" id="tab-pagos"
+                        class="tab-btn px-6 py-2 rounded-lg font-semibold bg-white text-gray-600 hover:bg-gray-100 transition-all border">
+                        <i class="fa-solid fa-money-bill-transfer mr-2"></i> Pagos y Aprobaciones
+                    </button>
+                </div>
+
+                <div id="view-disciplinas" class="tab-content block animate-fade-in">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="bg-white p-6 rounded-xl shadow-lg border border-primary/10 h-fit">
+                            <h3 class="text-xl font-bold text-secondary mb-4">
+                                Crear Nueva Disciplina
+                            </h3>
+                            <form id="crear-disciplina-form">
+                                <div class="mb-3">
+                                    <label class="block text-primary text-sm font-medium mb-1">
+                                        Nombre
+                                    </label>
+                                    <input type="text" name="nombre" required placeholder="Ej: Danza Aérea"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-accent focus:border-accent text-sm">
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-3 mb-3">
+                                    <div>
+                                        <label class="block text-primary text-sm font-medium mb-1">
+                                            Precio Mensual ($)</label>
+                                        <input type="number" name="precioMensual" required placeholder="0.00"
+                                            step="0.01"
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-accent text-sm">
+                                    </div>
+                                    <div class="flex items-center mt-6">
+                                        <label class="inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" name="activa" checked class="sr-only peer">
+                                            <div
+                                                class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-secondary">
+                                            </div>
+                                            <span class="ms-2 text-sm font-medium text-gray-700">
+                                                Activa
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="block text-primary text-sm font-medium mb-1">
+                                        Descripción
+                                    </label>
+                                    <textarea name="descripcion" rows="2"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                                    </textarea>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="block text-primary text-sm font-medium mb-2 flex justify-between">
+                                        Horarios Disponibles
+                                        <button type="button" onclick="agregarFilaHorario('contenedor-horarios-crear')"
+                                            class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded hover:bg-green-200">
+                                            <i class="fa-solid fa-plus"></i> Agregar
+                                        </button>
+                                    </label>
+
+                                    <div id="contenedor-horarios-crear" class="space-y-2 max-h-40 overflow-y-auto pr-1">
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="block text-primary text-sm font-medium mb-1">
+                                        Imágenes (Máximo 3 - La primera será la principal)
+                                    </label>
+                                    <input type="file" name="fotos" id="input-fotos" multiple accept="image/*"
+                                        class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-accent file:text-primary hover:file:bg-accent/80 transition-all cursor-pointer">
+                                </div>
+
+                                <button type="submit"
+                                    class="w-full bg-primary text-white py-2 rounded-lg font-semibold hover:bg-primary/90 transition text-sm">
+                                    Guardar Disciplina
+                                </button>
+                            </form>
+                        </div>
+
+                        <div class="md:col-span-2 bg-white p-6 rounded-xl shadow-lg border border-primary/10">
+                            <h3 class="text-xl font-bold text-secondary mb-4">
+                                Disciplinas Activas
+                            </h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm text-left text-gray-500">
+                                    <thead class="w-full text-xs text-white uppercase bg-secondary">
+                                        <tr class="w-full">
+                                            <th class="px-8 py-3 text-center rounded-tl-lg">Nombre</th>
+                                            <th class="px-8 py-3 text-center">Horarios Registrados</th>
+                                            <th class="px-8 py-3 rounded-tr-lg text-center">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabla-disciplinas-body">
+                                        <tr>
+                                            <td colspan="3" class="text-center py-4">Cargando disciplinas...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="view-equipo" class="tab-content hidden animate-fade-in">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="bg-white p-6 rounded-xl shadow-lg border border-primary/10 h-fit">
+                            <h3 class="text-xl font-bold text-secondary mb-4">
+                                Agregar al Equipo
+                            </h3>
+                            <form id="crear-equipo-form">
+                                <div class="mb-3">
+                                    <label class="block text-primary text-sm font-medium mb-1">
+                                        Nombre del Docente
+                                    </label>
+                                    <input type="text" name="nombre" required
+                                        class="w-full px-3 py-2 border rounded-lg text-sm">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="block text-primary text-sm font-medium mb-1">
+                                        Cargo del Docente
+                                    </label>
+                                    <input type="text" name="cargo" required
+                                        class="w-full px-3 py-2 border rounded-lg text-sm">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="block text-primary text-sm font-medium mb-1">Descripción /
+                                        Biografía</label>
+                                    <textarea name="descripcion" rows="3"
+                                        class="w-full px-3 py-2 border rounded-lg text-sm"></textarea>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="block text-primary text-sm font-medium mb-1">Fotografía</label>
+                                    <input type="file" name="imagen" id="input-foto-equipo" accept="image/*" required
+                                        class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-accent file:text-primary">
+                                </div>
+                                <button type="submit"
+                                    class="w-full bg-primary text-white py-2 rounded-lg font-semibold hover:bg-primary/90 text-sm">
+                                    Guardar Miembro
+                                </button>
+                            </form>
+                        </div>
+
+                        <div class="md:col-span-2 bg-white p-6 rounded-xl shadow-lg border border-primary/10">
+                            <h3 class="text-xl font-bold text-secondary mb-4">
+                                Docentes Registrados
+                            </h3>
+                            <div id="lista-equipo" class="flex flex-col gap-4 max-h-[500px] overflow-y-auto">
+                                <p class="text-center text-gray-400 py-4">Cargando...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="view-usuarios" class="tab-content hidden animate-fade-in">
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-primary/10">
+                        <h3 class="text-xl font-bold text-secondary mb-4">
+                            Usuarios Registrados
+                        </h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left text-gray-500">
+                                <thead class="text-xs text-white uppercase bg-secondary">
+                                    <tr>
+                                        <th class="px-4 py-3 rounded-tl-lg">Nombre</th>
+                                        <th class="px-4 py-3">Email / Teléfono</th>
+                                        <th class="px-4 py-3">Rol</th>
+                                        <th class="px-4 py-3">Datos Alumno</th>
+                                        <th class="px-4 py-3 rounded-tr-lg">Fecha Registro</th>
+                                        <th class="px-4 py-3">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla-usuarios-body">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="view-pagos" class="tab-content hidden animate-fade-in">
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-primary/10">
+                        <h3 class="text-xl font-bold text-secondary mb-4">Pagos Pendientes de Aprobación</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left text-gray-500">
+                                <thead class="text-xs text-white uppercase bg-primary">
+                                    <tr>
+                                        <th class="px-4 py-3 rounded-tl-lg">Usuario</th>
+                                        <th class="px-4 py-3">Concepto</th>
+                                        <th class="px-4 py-3">Ref. / Monto</th>
+                                        <th class="px-4 py-3 text-center">Comprobante</th>
+                                        <th class="px-4 py-3 rounded-tr-lg text-center">Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla-pagos-body">
+                                    <tr>
+                                        <td colspan="5" class="text-center py-4">No hay pagos pendientes.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div id="modal-editar"
+                class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden flex items-center justify-center z-50 p-4">
+                <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+                    <div class="bg-primary p-4 rounded-t-lg flex justify-between items-center">
+                        <h2 class="text-xl font-bold text-white">
+                            Editar Disciplina
+                        </h2>
+                        <button onclick="cerrarModal()" class="text-white hover:text-gray-300">
+                            <i class="fa-solid fa-times"></i>
+                        </button>
+                    </div>
+
+                    <form id="form-editar-disciplina" class="p-6">
+                        <input type="hidden" id="edit-id">
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">
+                                    Nombre
+                                </label>
+                                <input type="text" id="edit-nombre"
+                                    class="w-full border p-2 rounded focus:ring-secondary focus:border-secondary">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">
+                                    Precio Mensual ($)
+                                </label>
+                                <input type="number" id="edit-precio" step="0.01"
+                                    class="w-full border p-2 rounded focus:ring-secondary">
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700">
+                                Descripción
+                            </label>
+                            <textarea id="edit-descripcion" rows="2" class="w-full border p-2 rounded"></textarea>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="edit-activa" class="sr-only peer">
+                                <div
+                                    class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary">
+                                </div>
+                                <span class="ms-3 text-sm font-medium text-gray-700">
+                                    Disciplina Activa
+                                </span>
+                            </label>
+                        </div>
+
+                        <div class="border-t pt-4 mt-4">
+                            <div class="flex justify-between items-center mb-3">
+                                <h4 class="font-bold text-gray-700">
+                                    Horarios
+                                </h4>
+                                <button type="button" onclick="agregarFilaHorario('contenedor-horarios-editar')"
+                                    class="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded hover:bg-blue-200">
+                                    <i class="fa-solid fa-plus"></i>
+                                    Nuevo Horario
+                                </button>
+                            </div>
+
+                            <div id="contenedor-horarios-editar" class="space-y-2">
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end gap-3 mt-6 pt-4 border-t">
+                            <button type="button" onclick="cerrarModal()"
+                                class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">
+                                Cancelar
+                            </button>
+                            <button type="submit"
+                                class="px-6 py-2 bg-secondary text-white rounded hover:bg-blue-900 font-semibold">
+                                Guardar Cambios
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div id="modal-usuario-detalle"
+                class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden flex items-center justify-center z-50 overflow-y-auto py-10">
+                <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl m-4 animate-fade-in">
+
+                    <div class="bg-primary p-6 rounded-t-xl flex justify-between items-center text-white">
+                        <h2 class="text-2xl font-bold flex items-center gap-3">
+                            <i class="fa-solid fa-address-card"></i> Perfil del Usuario
+                        </h2>
+                        <button onclick="cerrarModalUsuario()" class="text-white hover:text-gray-300 text-2xl">
+                            <i class="fa-solid fa-times"></i>
+                        </button>
+                    </div>
+
+                    <div class="p-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+                        <div class="lg:col-span-1 space-y-6">
+                            <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                                <h3 class="font-bold text-secondary border-b pb-2 mb-3">Datos del Titular</h3>
+                                <p class="text-sm text-gray-500">Nombre</p>
+                                <p id="modal-nombre" class="font-medium text-lg mb-2 text-gray-800">Cargando...</p>
+
+                                <p class="text-sm text-gray-500">Contacto</p>
+                                <p id="modal-contacto" class="font-medium text-sm mb-2 text-gray-800">...</p>
+
+                                <p class="text-sm text-gray-500">Fecha Nacimiento</p>
+                                <p id="modal-nacimiento" class="font-medium text-sm text-gray-800">...</p>
+
+                                <p class="text-sm text-gray-500 mt-2">Condiciones Médicas</p>
+                                <p id="modal-lesiones" class="text-sm italic text-gray-600 bg-white p-2 rounded border">
+                                    ...</p>
+                            </div>
+
+                            <div id="modal-seccion-alumno"
+                                class="hidden bg-highlight/10 p-4 rounded-lg border border-highlight/30">
+                                <h3 class="font-bold text-highlight border-b border-highlight/20 pb-2 mb-3">Datos del
+                                    Alumno/a</h3>
+                                <p class="text-sm text-gray-500">Nombre Alumno</p>
+                                <p id="modal-alumno-nombre" class="font-medium text-lg mb-2 text-gray-800">...</p>
+
+                                <div class="flex gap-4">
+                                    <div>
+                                        <p class="text-sm text-gray-500">Edad</p>
+                                        <p id="modal-alumno-edad" class="font-medium text-gray-800">...</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-500">Fecha Nac.</p>
+                                        <p id="modal-alumno-nac" class="font-medium text-gray-800">...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="lg:col-span-2">
+                            <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                                <i class="fa-regular fa-calendar-check text-secondary"></i>
+                                Historial de Pagos (Año Actual)
+                            </h3>
+
+                            <div id="modal-calendario-grid" class="grid grid-cols-3 sm:grid-cols-4 gap-4">
+                            </div>
+
+                            <div class="mt-8">
+                                <h4 class="font-bold text-gray-700 mb-2 text-sm uppercase">
+                                    Últimos Pagos Registrados
+                                </h4>
+                                <div class="overflow-x-auto border rounded-lg">
+                                    <table class="w-full text-sm text-left text-gray-500">
+                                        <thead class="bg-gray-100 text-gray-700 uppercase text-xs">
+                                            <tr>
+                                                <th class="px-3 py-2">Fecha</th>
+                                                <th class="px-3 py-2">Disciplina</th>
+                                                <th class="px-3 py-2">Ref</th>
+                                                <th class="px-3 py-2">Estado</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="modal-lista-pagos">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="bg-gray-100 p-4 rounded-b-xl flex justify-end">
+                        <button onclick="cerrarModalUsuario()"
+                            class="px-6 py-2 bg-gray-400 text-white rounded hover:bg-gray-500 transition">
+                            Cerrar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="modal-editar-equipo"
+                class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden flex items-center justify-center z-50 p-4">
+                <div class="bg-white rounded-lg shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto animate-fade-in">
+                    <div class="bg-secondary p-4 rounded-t-lg flex justify-between items-center text-white">
+                        <h2 class="text-xl font-bold">
+                            <i class="fa-solid fa-user-pen mr-2"></i>
+                            Editar Docente
+                        </h2>
+
+                        <button onclick="document.getElementById('modal-editar-equipo').classList.add('hidden')"
+                            class="hover:text-accent">
+                            <i class="fa-solid fa-times text-xl"></i>
+                        </button>
+                    </div>
+
+                    <form id="form-editar-equipo" class="p-6 space-y-4">
+                        <input type="hidden" id="edit-team-id">
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                Nombre
+                            </label>
+                            <input type="text" id="edit-team-nombre" required
+                                class="w-full border p-2 rounded focus:ring-2 focus:ring-secondary outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                Cargo
+                            </label>
+                            <input type="text" id="edit-team-cargo" required
+                                class="w-full border p-2 rounded focus:ring-2 focus:ring-secondary outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                Biografía / Descripción
+                            </label>
+                            <textarea id="edit-team-descripcion" rows="4"
+                                class="w-full border p-2 rounded focus:ring-2 focus:ring-secondary outline-none text-sm"></textarea>
+                            <p class="text-xs text-gray-400 mt-1">
+                                Los saltos de línea se respetarán en la página.</p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                Actualizar Fotografía
+                            </label>
+                            <input type="file" id="edit-team-imagen" accept="image/*"
+                                class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200">
+                        </div>
+
+                        <div class="flex justify-end gap-3 pt-4 border-t">
+                            <button type="button"
+                                onclick="document.getElementById('modal-editar-equipo').classList.add('hidden')"
+                                class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">
+                                Cancelar
+                            </button>
+                            <button type="submit"
+                                class="px-6 py-2 bg-secondary text-white rounded hover:bg-primary font-bold transition-colors">
+                                Guardar Cambios
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div id="modal-aprobar-pago"
+                class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden flex items-center justify-center z-[70] p-4">
+                <div class="bg-white rounded-lg shadow-xl w-full max-w-sm animate-fade-in p-6">
+                    <h3 class="text-lg font-bold text-primary mb-2">
+                        Confirmar Aprobación
+                    </h3>
+                    <p class="text-sm text-gray-500 mb-4">
+                        Selecciona el mes al que corresponde este pago para el historial del alumno.
+                    </p>
+
+                    <form id="form-aprobar-pago">
+                        <input type="hidden" id="pago-id-aprobar">
+
+                        <div class="mb-3">
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Mes</label>
+                            <select id="select-mes-pago" class="w-full border p-2 rounded focus:ring-secondary text-sm">
+                                <option value="0">Enero</option>
+                                <option value="1">Febrero</option>
+                                <option value="2">Marzo</option>
+                                <option value="3">Abril</option>
+                                <option value="4">Mayo</option>
+                                <option value="5">Junio</option>
+                                <option value="6">Julio</option>
+                                <option value="7">Agosto</option>
+                                <option value="8">Septiembre</option>
+                                <option value="9">Octubre</option>
+                                <option value="10">Noviembre</option>
+                                <option value="11">Diciembre</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">
+                                Año
+                            </label>
+                            <input type="number" id="input-anio-pago"
+                                class="w-full border p-2 rounded focus:ring-secondary text-sm">
+                        </div>
+
+                        <div class="flex justify-end gap-2">
+                            <button type="button"
+                                onclick="document.getElementById('modal-aprobar-pago').classList.add('hidden')"
+                                class="px-4 py-2 bg-gray-200 text-gray-700 rounded text-sm hover:bg-gray-300">
+                                Cancelar
+                            </button>
+                            <button type="submit"
+                                class="px-4 py-2 bg-green-600 text-white rounded text-sm hover:bg-green-700 font-bold">
+                                Aprobar Pago
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <%- include ('./partials/footer.ejs') %>
+
+</body>
+<script src="/js/dashboard-admin.js"></script>
+<script src="/js/alert.js"></script>
+
+
+</html>

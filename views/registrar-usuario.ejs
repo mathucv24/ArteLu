@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ArteLu | Academia de Deportes Aéreos</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#52054d",
+                        secondary: "#2f328a",
+                        accent: "#bca0dd",
+                        highlight: "#ab5b9f",
+                        lightbg: "#efefdc",
+                        neutralgray: "#d9d9d9",
+                    }
+                }
+            }
+        }
+    </script>
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <link rel="stylesheet" href="/css/styles.css" />
+</head>
+
+<body class="bg-lightbg text-primary dark:bg-gray-900 dark:text-neutralgray transition-colors duration-500">
+    <%- include ('./partials/alert.ejs') %>
+        <%- include ('./partials/navbar.ejs') %>
+
+            <div class="w-full flex flex-grow flex-col items-center px-2 py-16 my-4 md:my-28">
+                <div class="w-full rounded-lg shadow-2xl bg-primary p-8 m-10">
+                    <h1 class="text-5xl font-extrabold font-style: italic mb-10 font-mono text-white">
+                        Registrar usuario
+                    </h1>
+                    <form class="w-full flex flex-col gap-5 mt-6 px-6 items-center md:items-start"
+                        id="registrar-usuario-form">
+                        <div class="w-full flex flex-col gap-2">
+                            <label class="text-white" for="nombre">
+                                Nombre
+                            </label>
+                            <input class="bg-white rounded-lg h-8" type="text" name="nombre" id="nombre"
+                                placeholder="Ingrese su nombre y su apellido">
+                        </div>
+                        <div class="w-full flex flex-col gap-2">
+                            <label class="text-white" for="telefono">
+                                Teléfono
+                            </label>
+                            <input class="bg-white rounded-lg h-8" type="text" name="telefono" id="telefono"
+                                placeholder="Ingrese su telefono con whatsapp preferiblemente">
+                        </div>
+                        <div class="w-full flex flex-col gap-2">
+                            <label class="text-white" for="email">
+                                Email
+                            </label>
+                            <input class="bg-white rounded-lg h-8" type="email" name="email" id="email"
+                                placeholder="Ingrese su correo electrónico">
+                        </div>
+                        <div class="w-full flex flex-col gap-2">
+                            <label class="text-white" for="password">
+                                Contraseña
+                            </label>
+                            <input class="bg-white rounded-lg h-8" type="password" name="password" id="password">
+                        </div>
+                        <p class="text-white font-thin text-sm">* Debe tener mas de 6 caracteres</p>
+                        <p class="text-white font-thin text-sm">* Debe tener caracteres y numeros</p>
+                        <p class="text-white font-thin text-sm">* Debe contener al menos un caracter especial</p>
+                        <p class="text-white font-thin text-sm">* Debe contener al menos una mayuscula</p>
+                        <p class="text-white font-thin text-sm">* Ambas contraseñas deben coincidir</p>
+                        <div class="w-full flex flex-col gap-2">
+                            <label class="text-white" for="repassword">
+                                Repetir Contraseña
+                            </label>
+                            <input class="bg-white rounded-lg h-8" type="password" name="repassword" id="repassword">
+                        </div>
+                        <button id="btn-submit" disabled
+                            class="w-fit p-2 rounded-lg bg-gray-100 hover:bg-gray-50 text-black font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                            type="submit">
+                            Registrar
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+
+            <div id="modal-verificacion"
+                class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center backdrop-blur-sm">
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-2xl w-96 flex flex-col gap-4 relative">
+                    <button id="btn-cerrar-modal"
+                        class="absolute top-2 right-4 text-gray-500 hover:text-red-500 font-bold text-xl">
+                        &times;
+                    </button>
+
+                    <h2 class="text-2xl font-bold text-primary dark:text-accent text-center">
+                        Verificar Cuenta
+                    </h2>
+                    <p class="text-gray-600 dark:text-gray-300 text-center text-sm">
+                        Hemos enviado un código a tu correo electrónico.
+                    </p>
+
+                    <div class="flex flex-col gap-2">
+                        <label class="text-primary dark:text-white font-semibold">
+                            Código de 6 dígitos
+                        </label>
+                        <input type="text" id="input-codigo" maxlength="6"
+                            class="border-2 border-gray-300 rounded-lg p-2 text-center text-xl tracking-widest focus:border-secondary focus:outline-none dark:bg-gray-700 dark:text-white transition-colors">
+                    </div>
+
+                    <button id="btn-verificar-codigo"
+                        class="bg-primary hover:bg-highlight text-white font-bold py-2 px-4 rounded-lg transition-colors mt-2">
+                        Confirmar Código
+                    </button>
+                </div>
+            </div>
+
+            <%- include ('./partials/footer.ejs') %>
+</body>
+<script type="module" src="/js/registrar-usuario.js"></script>
+<script src="/js/alert.js"></script>
+
+</html>

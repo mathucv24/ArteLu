@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ArteLu | Academia de Deportes Aéreos</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#52054d",
+                        secondary: "#2f328a",
+                        accent: "#bca0dd",
+                        highlight: "#ab5b9f",
+                        lightbg: "#efefdc",
+                        neutralgray: "#d9d9d9",
+                    }
+                }
+            }
+        }
+    </script>
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <link rel="stylesheet" href="/css/styles.css" />
+
+    <link rel="icon" href="/assets/logo.png" type="Logo de ArteLu" />
+</head>
+
+<body
+    class="flex flex-col min-h-screen bg-lightbg text-primary dark:bg-gray-900 dark:text-neutralgray transition-colors duration-500">
+
+    <%- include('./partials/navbar.ejs') %>
+
+        <main class="flex-1">
+            <section id="inicio" class="relative h-screen overflow-hidden">
+
+
+                <div id="slider" class="absolute inset-0 flex transition-transform duration-700 ease-in-out">
+                    <% for(let i=1; i <=10; i++) { %>
+                        <div class="min-w-full h-screen bg-cover bg-center"
+                            style="background-image: url('/assets/hero<%= i %>.png')">
+                        </div>
+                        <% } %>
+                </div>
+
+                <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+
+                <div class="relative h-full flex items-center justify-center text-center px-6">
+                    <div class="text-white max-w-3xl">
+                        <img src="/assets/Letras.png" alt="Letras ArteLu" class="mx-auto mb-2 w-48 md:w-96">
+                        <h2 class="text-2xl md:text-4xl font-extrabold mb-6">
+                            Academia de Deportes Aéreos
+                        </h2>
+                        <p class="mb-8 text-lg md:text-xl">
+                            Fuerza • Arte • Movimiento • Libertad
+                        </p>
+
+                    </div>
+                </div>
+
+
+                <button id="prevSlide" class="absolute left-4 top-1/2 -translate-y-1/2 z-20 text-white text-3xl">
+                    ❮
+                </button>
+
+                <button id="nextSlide" class="absolute right-4 top-1/2 -translate-y-1/2 z-20 text-white text-3xl">
+                    ❯
+                </button>
+
+
+                <div id="dots" class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+                </div>
+
+            </section>
+
+            <section id="nosotros"
+                class="py-16 md:py-28 px-6 bg-[url('/assets/fondo2.png')] bg-no-repeat bg-opacity-50 bg-center">
+                <h3 class="text-3xl md:text-5xl font-extrabold font-style: italic mb-10 font-mono">
+                    Nosotros
+                </h3>
+                <div
+                    class="prose dark:prose-invert max-w-none text-base md:text-lg leading-relaxed text-justify md:text-left">
+                    <p class="text-2xl font-style: italic font-bold">
+                        Somos el resultado de una idea principal: Si algo te apasiona,
+                        hazlo en serio.
+                    </p>
+                    <br>
+                    <p>
+                        Tras varios años de trabajo, decidimos crear un grupo de enseñanza con la intención de ser la
+                        mas grande academia de artes aéreas de Venezuela.
+                    </p>
+                    <br>
+                    <p>
+                        Nuestro principal cometido es difundir, promover y fomentar las Artes Acrobáticas en el país, su
+                        estudio de manera integral y su aplicación profesional como medio de vida.
+                    </p>
+                    <br>
+                    <p>
+                        Somos un gran equipo, con varios años de experiencia y desempeñando con mucha libertad creativa
+                        nuestro campo de desarrollo. En ArteLu somos fieles a una filosofía de trabajo única, formulada
+                        para el
+                        máximo desempeño y crecimiento.
+                    </p>
+                    <br>
+                    <p>
+                        Todos son bienvenidos a conocer este arte y acercarte a las actividades de este grupo aéreo.
+                    </p>
+                    <br>
+                    <p>
+                        Te brindamos toda la información necesaria para que tomes la iniciativa de acompañarnos en este
+                        proceso de creación y crecimiento compartiendo nuestra actividad.
+                        Deseamos que sea de tu agrado.
+                    </p>
+                    <br>
+                    <h4 class="text-2xl font-bold mb-6 flex justify-center">
+                        ATREVETE A VOLAR CON NOSOTROS!
+                    </h4>
+                </div>
+
+                <div class="flex justify-center items-center py-10">
+                    <a href="/teamArteLu" class="bg-highlight hover:bg-secondary dark:bg-accent text-white dark:text-black text-xl md:text-2xl font-bold 
+              px-10 py-5 rounded-full shadow-lg transform transition-all 
+              duration-300 hover:scale-110 hover:shadow-2xl inline-block text-center">
+                        Conoce a nuestro equipo
+                    </a>
+                </div>
+            </section>
+
+            <script>
+                window.datosClases = <%- JSON.stringify(disciplinas || []) %>
+            </script>
+
+            <section id="clases" class="bg-neutralgray dark:bg-gray-800 py-28 px-6">
+                <div class="">
+                    <h3 class="text-5xl font-extrabold font-style: italic mb-10 font-mono text-primary dark:text-white">
+                        Clases
+                    </h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+
+                        <% if (disciplinas && disciplinas.length> 0) { %>
+                            <% disciplinas.forEach(d=> { %>
+                                <% if (d.activa) { %>
+                                    <div onclick="abrirModalClase('<%= d._id %>')"
+                                        class="group relative flex flex-col overflow-hidden rounded-xl bg-surface-light dark:bg-surface-dark shadow-sm hover:shadow-md transition-all border border-neutral/20 dark:border-white/5 cursor-pointer">
+
+                                        <div class="aspect-square w-full bg-neutral/20 relative overflow-hidden">
+                                            <div class="aspect-square w-full bg-neutral/20 relative overflow-hidden">
+                                                <% const principal=d.imagenes && d.imagenes.length> 0
+                                                    ? (d.imagenes.find(img => img.esPrincipal) || d.imagenes[0]).url
+                                                    : null;
+
+                                                    const nombreLimpio = d.nombre.replace(/\s+/g, '+');
+                                                    const fotoFinal = principal ||
+                                                    `https://placehold.co/600x400/52054d/white?text=${nombreLimpio}`;
+                                                    %>
+
+                                                    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                                                        style="background-image: url('<%= fotoFinal %>');">
+                                                    </div>
+
+                                                    <div
+                                                        class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60">
+                                                    </div>
+                                            </div>
+                                            <div
+                                                class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60">
+                                            </div>
+                                        </div>
+
+                                        <div class="p-3 flex-1 flex flex-col justify-between bg-white dark:bg-gray-900">
+                                            <div>
+                                                <span
+                                                    class="text-secondary dark:text-white inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-accent/20 mb-1">
+                                                    PARA TODOS
+                                                </span>
+                                                <h4
+                                                    class="text-secondary dark:text-white font-bold text-base leading-tight mt-2 uppercase">
+                                                    <%= d.nombre %>
+                                                </h4>
+                                            </div>
+                                            <div class="mt-2 flex items-center justify-between">
+                                                <span
+                                                    class="text-xs text-gray-500 dark:text-gray-400 font-semibold group-hover:text-highlight transition-colors">
+                                                    Ver detalles <i class="fa-solid fa-plus ml-1"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% } %>
+                                        <% }) %>
+                                            <% } else { %>
+                                                <div class="col-span-3 text-center py-10">
+                                                    <p class="text-xl text-gray-500">Pronto publicaremos nuestras
+                                                        clases.</p>
+                                                </div>
+                                                <% } %>
+
+                    </div>
+                </div>
+            </section>
+
+            <section id="actividades" class="py-28 px-6">
+                <h3 class="text-5xl font-extrabold font-style: italic mb-10 font-mono">Actividades</h3>
+                <div class="grid md:grid-cols-3 gap-6">
+
+
+                    <div
+                        class="group relative flex flex-col overflow-hidden rounded-xl bg-surface-light dark:bg-surface-dark shadow-sm hover:shadow-md transition-all border border-neutral/20 dark:border-white/5">
+                        <div class="aspect-square w-full bg-neutral/20 relative overflow-hidden">
+                            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                                style="background-image:url('https://placehold.co/60x40');">
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60">
+                            </div>
+                        </div>
+                        <div class="p-3 flex-1 flex flex-col justify-between">
+                            <div>
+                                <span
+                                    class="text-secondary dark:text-white inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-accent/20 text-secondary mb-1">
+                                    3 PARTICIPANTES
+                                </span>
+                                <h4 class="text-secondary dark:text-white font-bold text-base leading-tight">
+                                    COMPETENCIA
+                                </h4>
+                            </div>
+                            <div class="mt-2 flex items-center justify-between">
+                                <span class="text-xs text-gray-500 dark:text-gray-400">1er Lugar</span>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div
+                        class="group relative flex flex-col overflow-hidden rounded-xl bg-surface-light dark:bg-surface-dark shadow-sm hover:shadow-md transition-all border border-neutral/20 dark:border-white/5">
+                        <div class="aspect-square w-full bg-neutral/20 relative overflow-hidden">
+                            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                                style="background-image:url('https://placehold.co/60x40');">
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60">
+                            </div>
+                        </div>
+                        <div class="p-3 flex-1 flex flex-col justify-between">
+                            <div>
+                                <span
+                                    class="text-secondary dark:text-white inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-accent/20 mb-1">
+                                    3 PARTICIPANTES
+                                </span>
+                                <h4 class="text-secondary dark:text-white font-bold text-base leading-tight">
+                                    COMPETENCIA
+                                </h4>
+                            </div>
+                            <div class="mt-2 flex items-center justify-between">
+                                <span class="text-xs text-gray-500 dark:text-gray-400">1er Lugar</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="group relative flex flex-col overflow-hidden rounded-xl bg-surface-light dark:bg-surface-dark shadow-sm hover:shadow-md transition-all border border-neutral/20 dark:border-white/5">
+                        <div class="aspect-square w-full bg-neutral/20 relative overflow-hidden">
+                            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                                style="background-image:url('https://placehold.co/60x40');">
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60">
+                            </div>
+                        </div>
+                        <div class="p-3 flex-1 flex flex-col justify-between">
+                            <div>
+                                <span
+                                    class="text-secondary dark:text-white inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-accent/20 text-secondary mb-1">
+                                    3 PARTICIPANTES
+                                </span>
+                                <h4 class="text-secondary dark:text-white font-bold text-base leading-tight">
+                                    COMPETENCIA
+                                </h4>
+                            </div>
+                            <div class="mt-2 flex items-center justify-between">
+                                <span class="text-xs text-gray-500 dark:text-gray-400">1er Lugar</span>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </section>
+
+            <!-- Elfsight AI Chatbot | Untitled AI Chatbot -->
+            <script src="https://elfsightcdn.com/platform.js" async></script>
+            <div class="elfsight-app-fba2c842-93e3-4d91-be23-45234b1815aa" data-elfsight-app-lazy></div>
+
+            <button id="openModal"
+                class="fixed bottom-20 right-16 md:bottom-28 md:right-6 bg-highlight hover:bg-secondary dark:bg-accent text-white dark:text-black transition px-4 py-4 rounded-full text-lg font-semibold">
+                Reserva tu Clase Ahora
+            </button>
+            <%- include('./partials/modal-clase.ejs') %>
+                <%- include('./partials/aside.ejs') %>
+                    <%- include('./partials/footer.ejs') %>
+
+        </main>
+
+        <script type="module" src="/js/inicio.js"></script>
+        <script type="module" src="/js/aside.js"></script>
+
+</body>
+
+</html>

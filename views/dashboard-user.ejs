@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ArteLu | Panel de Alumno</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#52054d",
+                        secondary: "#2f328a",
+                        accent: "#bca0dd",
+                        highlight: "#ab5b9f",
+                        lightbg: "#efefdc",
+                        neutralgray: "#d9d9d9",
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="icon" href="/assets/logo.png" />
+</head>
+
+<body class="flex flex-col min-h-screen bg-lightbg text-primary dark:bg-gray-900 dark:text-neutralgray transition-colors duration-500">
+    <%- include('./partials/navbar.ejs') %>
+    <%- include('./partials/alert.ejs') %>
+
+    <% 
+        const datosUsuario = typeof usuario !== 'undefined' ? usuario : {}; 
+        const listaPagos = typeof pagos !== 'undefined' && pagos ? pagos : [];
+    %>
+
+    <div class="container w-full mx-auto pt-24 pb-10 px-4 md:px-0 min-h-screen">
+        
+        <div class="mb-8 text-center p-6">
+            <h1 class="text-3xl font-bold text-primary mb-2">Panel de Control</h1>
+            <h3 class="text-gray-600">Bienvenido, <%= datosUsuario.nombre || 'Usuario' %></h3>
+        </div>
+
+        <div class="flex flex-wrap justify-center gap-4 mb-8 border-b border-gray-200 pb-4">
+            <button onclick="cambiarTab('perfil')" id="tab-perfil"
+                class="tab-btn px-6 py-2 rounded-lg font-semibold bg-primary text-white shadow-lg transition-all transform hover:-translate-y-1">
+                <i class="fa-solid fa-id-card mr-2"></i> Mi Perfil
+            </button>
+            <button onclick="cambiarTab('pagos')" id="tab-pagos"
+                class="tab-btn px-6 py-2 rounded-lg font-semibold bg-white text-gray-600 hover:bg-gray-100 transition-all border transform hover:-translate-y-1">
+                <i class="fa-solid fa-file-invoice-dollar mr-2"></i> Registrar Pago
+            </button>
+            <button onclick="cambiarTab('historial')" id="tab-historial"
+                class="tab-btn px-6 py-2 rounded-lg font-semibold bg-white text-gray-600 hover:bg-gray-100 transition-all border transform hover:-translate-y-1">
+                <i class="fa-solid fa-clock-rotate-left mr-2"></i> Historial
+            </button>
+        </div>
+
+        <div id="view-perfil" class="tab-content block animate-fade-in max-w-4xl mx-auto">
+            <div class="bg-white p-8 rounded-xl shadow-lg border border-primary/10">
+                <div id="vista-estatica">
+                    <div class="flex flex-col md:flex-row justify-between items-center mb-6 border-b pb-4">
+                        <div class="flex items-center gap-4 mb-4 md:mb-0">
+                            <div class="bg-gray-100 p-3 rounded-full">
+                                <i class="fa-solid fa-user text-4xl text-primary"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-2xl font-bold text-gray-800">Mis Datos</h2>
+                                <p class="text-sm text-gray-500">Información personal y de contacto</p>
+                            </div>
+                        </div>
+                        <button id="btn-habilitar-edicion" class="bg-accent hover:bg-highlight text-white px-5 py-2 rounded-lg transition-colors shadow-sm">
+                            <i class="fa-solid fa-pen mr-2"></i> Editar Perfil
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-4">
+                            <p class="p-3 bg-gray-50 rounded-lg border">
+                                <strong class="block text-xs text-gray-500 uppercase">Nombre Completo</strong>
+                                <span id="label-nombre" class="text-lg font-medium"><%= datosUsuario.nombre %></span>
+                            </p>
+                            <p class="p-3 bg-gray-50 rounded-lg border">
+                                <strong class="block text-xs text-gray-500 uppercase">Teléfono</strong>
+                                <span id="label-telefono" class="text-lg font-medium"><%= datosUsuario.telefono %></span>
+                            </p>
+                            <p class="p-3 bg-gray-50 rounded-lg border">
+                                <strong class="block text-xs text-gray-500 uppercase">Fecha Nacimiento</strong>
+                                <span id="label-fecha-nacimiento-ppal" class="text-lg font-medium">
+                                    <%= datosUsuario.fecha_nacimiento_ppal ? new Date(datosUsuario.fecha_nacimiento_ppal).toISOString().split('T')[0] : 'No registrada' %>
+                                </span>
+                            </p>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="p-3 bg-gray-50 rounded-lg border h-full">
+                                <strong class="block text-xs text-gray-500 uppercase mb-1">Lesiones o condiciones médicas</strong>
+                                <span id="label-lesiones" class="text-gray-700 italic">
+                                    <%= datosUsuario.lesiones || 'Ninguna registrada' %>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="vista-datos-alumno" class="<%= datosUsuario.rol_user ? '' : 'hidden' %> mt-8 p-6 bg-purple-50 rounded-xl border border-purple-100">
+                        <h3 class="font-bold text-primary text-lg mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-child-reaching"></i> Datos del Alumno/a
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <p class="p-2 bg-white rounded border border-purple-100">
+                                <strong class="block text-xs text-gray-500">Nombre:</strong> 
+                                <span id="label-alumno" class="font-medium"><%= datosUsuario.alumno %></span>
+                            </p>
+                            <p class="p-2 bg-white rounded border border-purple-100">
+                                <strong class="block text-xs text-gray-500">Edad:</strong> 
+                                <span id="label-edad" class="font-medium"><%= datosUsuario.edad %></span> años
+                            </p>
+                            <p class="p-2 bg-white rounded border border-purple-100">
+                                <strong class="block text-xs text-gray-500">Fecha Nac.:</strong>
+                                <span id="label-fecha-nacimiento-alumno">
+                                    <%= datosUsuario.fecha_nacimiento_alumno ? new Date(datosUsuario.fecha_nacimiento_alumno).toISOString().split('T')[0] : '' %>
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="form-actualizar-perfil" class="hidden">
+                    <h2 class="text-xl font-bold mb-6 text-primary border-b pb-2">Actualizar Información</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        
+                        <div class="col-span-1 md:col-span-2">
+                            <label class="text-xs font-bold text-gray-500 uppercase">Nombre Completo</label>
+                            <input id="input-nombre" type="text" value="<%= datosUsuario.nombre %>" class="border p-2 rounded w-full focus:ring-accent">
+                        </div>
+
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase">Teléfono</label>
+                            <input id="input-telefono" type="tel" value="<%= datosUsuario.telefono %>" class="border p-2 rounded w-full focus:ring-accent">
+                        </div>
+
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase">Fecha de Nacimiento</label>
+                            <input id="input-fecha-nacimiento-ppal" type="date"
+                                value="<%= datosUsuario.fecha_nacimiento_ppal ? new Date(datosUsuario.fecha_nacimiento_ppal).toISOString().split('T')[0] : '' %>"
+                                class="border p-2 rounded w-full focus:ring-accent">
+                        </div>
+
+                        <div class="col-span-1 md:col-span-2">
+                            <label class="text-xs font-bold text-gray-500 uppercase">Lesiones o condiciones</label>
+                            <textarea id="input-lesiones" class="border p-2 rounded w-full focus:ring-accent"><%= datosUsuario.lesiones %></textarea>
+                        </div>
+
+                        <div class="col-span-1 md:col-span-2 p-3 bg-gray-50 rounded border border-gray-200 mt-2 flex items-center gap-3">
+                            <input type="checkbox" id="check-representante" class="w-5 h-5 text-highlight rounded focus:ring-highlight" <%= datosUsuario.rol_user ? 'checked' : '' %>>
+                            <label for="check-representante" class="text-sm font-semibold text-gray-700 cursor-pointer select-none">
+                                Soy Representante (Gestiono la cuenta de un alumno)
+                            </label>
+                        </div>
+
+                        <div id="seccion-alumno" class="<%= datosUsuario.rol_user ? '' : 'hidden' %> col-span-1 md:col-span-2 border-l-4 border-highlight pl-4 mt-2 space-y-3 bg-purple-50 p-4 rounded-r-lg">
+                            <label class="text-xs font-bold text-primary uppercase block">Datos del Alumno/a</label>
+                            <input id="input-alumno" type="text" value="<%= datosUsuario.alumno || '' %>" placeholder="Nombre del Alumno/a" class="border p-2 rounded w-full">
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="text-xs text-gray-500 mb-1">Fecha Nac. Alumno</label>
+                                    <input id="input-fecha-nacimiento-alumno" type="date"
+                                        value="<%= datosUsuario.fecha_nacimiento_alumno ? new Date(datosUsuario.fecha_nacimiento_alumno).toISOString().split('T')[0] : '' %>"
+                                        class="border p-2 rounded w-full">
+                                </div>
+                                <div>
+                                    <label class="text-xs text-gray-500 mb-1">Edad</label>
+                                    <input id="input-edad" type="number" value="<%= datosUsuario.edad || '' %>" placeholder="Edad" class="border p-2 rounded w-full">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4 mt-6">
+                        <button type="submit" id="btn-guardar" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg flex items-center justify-center gap-2 font-bold shadow transition-transform active:scale-95">
+                            <span id="btn-texto">Guardar Cambios</span>
+                            <i id="btn-spinner" class="fa-solid fa-circle-notch animate-spin hidden"></i>
+                        </button>
+                        <button type="button" id="btn-cancelar" class="bg-gray-400 hover:bg-gray-500 text-white px-6 py-3 rounded-lg font-bold shadow transition-colors">
+                            Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="view-pagos" class="tab-content hidden animate-fade-in max-w-4xl mx-auto">
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                <div class="bg-gradient-to-r from-primary to-highlight p-6 text-white">
+                    <h2 class="text-2xl font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-paper-plane"></i> Registrar Nuevo Pago
+                    </h2>
+                    <p class="text-white/90 text-sm mt-1">
+                        Sube tu comprobante para validar tu inscripción o mensualidad.
+                    </p>
+                </div>
+
+                <div class="p-6 md:p-8">
+                    <div class="bg-gray-50 border border-gray-200 flex flex-col items-center gap-3 p-6 rounded-xl mb-8 text-center">
+                        <h3 class="text-lg font-bold text-primary">Datos Pago Móvil</h3>
+                        <div class="text-gray-700 font-mono text-lg bg-white px-4 py-2 rounded border border-gray-300 shadow-sm">
+                            Banco de Venezuela (0102) <br>
+                            0424-1690591 <br>
+                            C.I. 26.774.107
+                        </div>
+                    </div>
+
+                    <form action="/api/pagos/registrar" method="POST" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="col-span-1 md:col-span-2">
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Frecuencia de clases</label>
+                            <select name="frecuencia" id="select-frecuencia" class="w-full rounded-lg border-gray-200 bg-gray-50 px-4 py-3 focus:ring-highlight focus:border-highlight outline-none border transition-colors">
+                                <option>1 clase a la semana</option>
+                                <option>2 clases a la semana</option>
+                                <option>3 clases a la semana</option>
+                                <option>4 clases a la semana</option>
+                                <option>5 clases a la semana</option>
+                                <option>6 clases a la semana</option>
+                            </select>
+                        </div>
+
+                        <div class="col-span-1 md:col-span-2">
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-2">
+                                Disciplina(s) <span id="contador-seleccion" class="text-highlight text-[10px] ml-2 font-normal normal-case">(Selecciona opciones)</span>
+                            </label>
+                            <div id="contenedor-disciplinas" class="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 bg-gray-50 rounded-lg border border-gray-200 max-h-60 overflow-y-auto">
+                                <p class="text-xs text-gray-400 italic">Cargando disciplinas...</p>
+                            </div>
+                            <input type="hidden" name="disciplina" id="input-disciplinas-seleccionadas" required>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Monto ($ o Bs)</label>
+                            <input type="number" name="monto" placeholder="0.00" step="0.01" class="w-full rounded-lg border-gray-200 bg-gray-50 px-4 py-3 focus:ring-highlight focus:border-highlight outline-none border" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Referencia (4 últimos dígitos)</label>
+                            <input type="text" name="referencia" placeholder="Ej: 1234 (0000 si es efectivo)" class="w-full rounded-lg border-gray-200 bg-gray-50 px-4 py-3 focus:ring-highlight focus:border-highlight outline-none border" required>
+                        </div>
+
+                        <div class="col-span-1 md:col-span-2">
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Comprobante (Captura)</label>
+                            <div class="flex items-center justify-center w-full">
+                                <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-all">
+                                    <div class="flex flex-col items-center justify-center pt-5 pb-6 text-gray-500">
+                                        <i class="fa-solid fa-cloud-arrow-up text-3xl mb-2 text-gray-400"></i>
+                                        <p class="text-sm"><span class="font-semibold">Click para subir</span> o arrastra</p>
+                                        <p class="text-xs text-gray-400">JPG, PNG, PDF</p>
+                                    </div>
+                                    <input id="dropzone-file" name="comprobante" type="file" class="hidden" accept="image/*,.pdf" />
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="col-span-1 md:col-span-2 mt-4">
+                            <button type="submit" class="w-full bg-highlight hover:bg-secondary text-white font-bold py-4 rounded-xl transition-all shadow-md transform hover:-translate-y-1 flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-paper-plane"></i> Enviar Pago a Revisión
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-historial" class="tab-content hidden animate-fade-in max-w-6xl mx-auto space-y-8">
+            
+            <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                <h3 class="font-bold text-gray-800 mb-6 flex items-center gap-2 text-xl border-b pb-2">
+                    <i class="fa-regular fa-calendar-check text-secondary"></i> 
+                    Estado de Pagos <%= new Date().getFullYear() %>
+                </h3>
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                    <% 
+                    const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+                    const currentYear = new Date().getFullYear();
+                    
+                    meses.forEach((mes, index) => {
+                        let estado = 'sin_pago';
+                        
+                        // Uso de listaPagos (la variable segura) en lugar de pagos
+                        const pagosDelMes = listaPagos.filter(p => {
+                           let mesPago, anioPago;
+                           if (p.mesCorrespondiente !== undefined && p.mesCorrespondiente !== null) {
+                               mesPago = p.mesCorrespondiente;
+                               anioPago = p.anioCorrespondiente || currentYear;
+                           } else {
+                               const d = new Date(p.createdAt);
+                               mesPago = d.getMonth();
+                               anioPago = d.getFullYear();
+                           }
+                           return mesPago === index && anioPago === currentYear;
+                        });
+
+                        if (pagosDelMes.some(p => p.estado === 'aprobado')) estado = 'aprobado';
+                        else if (pagosDelMes.some(p => p.estado === 'pendiente')) estado = 'pendiente';
+                        else if (pagosDelMes.some(p => p.estado === 'rechazado')) estado = 'rechazado';
+
+                        let colorClass = "bg-gray-50 border-gray-200 text-gray-400 opacity-70 border-dashed";
+                        let iconClass = "fa-circle";
+                        let textStatus = "Sin pago";
+
+                        if(estado === 'aprobado') {
+                            colorClass = "bg-green-50 border-green-400 text-green-700 shadow-sm ring-1 ring-green-200";
+                            iconClass = "fa-check-circle";
+                            textStatus = "Pagado";
+                        } else if(estado === 'pendiente') {
+                            colorClass = "bg-yellow-50 border-yellow-400 text-yellow-700 shadow-sm ring-1 ring-yellow-200";
+                            iconClass = "fa-clock";
+                            textStatus = "Pendiente";
+                        } else if(estado === 'rechazado') {
+                            colorClass = "bg-red-50 border-red-400 text-red-700 shadow-sm ring-1 ring-red-200";
+                            iconClass = "fa-circle-xmark";
+                            textStatus = "Rechazado";
+                        }
+                    %>
+                    <div class="flex flex-col items-center justify-center p-4 rounded-xl border <%= colorClass %> transition-all duration-300 hover:shadow-md h-24">
+                        <span class="text-sm font-bold uppercase tracking-wider mb-1"><%= mes %></span>
+                        <% if(estado !== 'sin_pago') { %>
+                            <i class="fa-solid <%= iconClass %> text-2xl mb-1"></i>
+                            <span class="text-[10px] font-semibold uppercase"><%= textStatus %></span>
+                        <% } else { %>
+                            <span class="text-3xl font-bold text-gray-300/50">-</span>
+                        <% } %>
+                    </div>
+                    <% }); %>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                <h3 class="font-bold text-gray-800 mb-6 flex items-center gap-2 text-xl border-b pb-2">
+                    <i class="fa-solid fa-list text-secondary"></i> Mis Pagos Recientes
+                </h3>
+                <div class="overflow-x-auto rounded-lg border border-gray-100">
+                    <table class="w-full text-sm text-left text-gray-500">
+                        <thead class="text-xs text-white uppercase bg-secondary">
+                            <tr>
+                                <th class="px-6 py-4 rounded-tl-lg">Fecha</th>
+                                <th class="px-6 py-4">Disciplina</th>
+                                <th class="px-6 py-4">Monto</th>
+                                <th class="px-6 py-4 rounded-tr-lg">Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (listaPagos && listaPagos.length > 0) { %>
+                                <% listaPagos.forEach(pago => { %>
+                                <tr class="border-b hover:bg-gray-50 transition-colors">
+                                    <td class="px-6 py-4">
+                                        <%= new Date(pago.createdAt).toLocaleDateString() %>
+                                        <div class="text-[10px] text-gray-400">Ref: <%= pago.referencia || 'N/A' %></div>
+                                    </td>
+                                    <td class="px-6 py-4 font-medium text-gray-900">
+                                        <%= pago.disciplina %>
+                                    </td>
+                                    <td class="px-6 py-4 font-bold text-gray-700">
+                                        $<%= pago.monto %>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <% if (pago.estado === 'aprobado') { %>
+                                            <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded border border-green-400">Aprobado</span>
+                                        <% } else if (pago.estado === 'rechazado') { %>
+                                            <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded border border-red-400">Rechazado</span>
+                                        <% } else { %>
+                                            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded border border-yellow-400">Pendiente</span>
+                                        <% } %>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="4" class="text-center py-8 text-gray-500">
+                                        No tienes pagos registrados aún.
+                                    </td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <%- include('./partials/footer.ejs') %>
+</body>
+<script type="module" src="/js/dashboard-user.js"></script>
+<script src="/js/alert.js"></script>
+</html>

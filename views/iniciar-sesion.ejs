@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ArteLu | Academia de Deportes Aéreos</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#52054d",
+                        secondary: "#2f328a",
+                        accent: "#bca0dd",
+                        highlight: "#ab5b9f",
+                        lightbg: "#efefdc",
+                        neutralgray: "#d9d9d9",
+                    }
+                }
+            }
+        }
+    </script>
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <link rel="stylesheet" href="/css/styles.css" />
+</head>
+
+<body class="bg-lightbg text-primary dark:bg-gray-900 dark:text-neutralgray transition-colors duration-500">
+    <%- include ('./partials/alert.ejs') %>
+    <%- include ('./partials/navbar.ejs') %>
+   <div class="w-full flex flex-grow flex-col  items-center my-20 px-8 py-16 md:my-28">
+        <div class="w-full rounded-lg shadow-lg bg-primary p-8 m-20">
+            <h1 class="text-5xl font-extrabold font-style: italic mb-10 font-mono text-white">
+                Iniciar sesion
+            </h1>
+            <form class="w-full flex flex-col gap-5 mt-4 px-4" id="iniciar-sesion-form">
+                <div class="w-full flex flex-col gap-2">
+                    <label class="text-white" for="email">
+                        Email
+                    </label>
+                    <input class="bg-white rounded-lg h-8" type="email" name="email" id="email" placeholder="ejemplo@correo.com">
+                </div>
+                <div class="w-full flex flex-col gap-2">
+                    <label class="text-white" for="password">
+                        Contraseña
+                    </label>
+                    <input class="bg-white rounded-lg h-8" type="password" name="password" id="password">
+                </div>
+                <button 
+                class=" items-center md:items-start w-fit p-2 rounded-lg bg-accent hover:bg-secondary hover:text-white text-black items-center font-bold" 
+                type="submit"
+                >
+                    Iniciar sesion
+                </button>
+            </form>
+        </div>
+   </div>
+   <%- include ('./partials/footer.ejs') %>
+
+<script type="module" src="/js/iniciar-sesion.js"></script>
+<script src="/js/alert.js"></script>
+
+</body>
+
+</html>

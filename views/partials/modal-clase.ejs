@@ -1,0 +1,80 @@
+<div id="modal-clase" class="fixed inset-0 z-[100] hidden" aria-labelledby="modal-title" role="dialog"
+    aria-modal="true">
+    
+    <div class="fixed inset-0 bg-gray-900/80 transition-opacity backdrop-blur-sm"
+        onclick="cerrarModalClase()"></div>
+
+    <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+        <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+
+            <div class="relative transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 text-left shadow-2xl transition-all 
+                        w-full sm:max-w-lg md:max-w-4xl max-h-[90vh] flex flex-col
+                        sm:my-8 border border-highlight/20">
+
+                <div class="bg-primary px-4 py-3 sm:px-6 flex justify-between items-center shrink-0">
+                    <h3 class="text-lg md:text-xl font-bold leading-6 text-white uppercase tracking-wide truncate pr-4" id="modal-titulo">
+                        </h3>
+                    <button type="button" onclick="cerrarModalClase()"
+                        class="text-white hover:text-accent transition-colors text-2xl p-2 rounded-full hover:bg-white/10">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <div class="p-5 md:p-8 overflow-y-auto custom-scrollbar">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
+
+                        <div class="flex flex-col gap-6">
+                            <div>
+                                <h4 class="text-xs font-bold text-highlight uppercase mb-2 tracking-wider">Descripción</h4>
+                                <p id="modal-descripcion"
+                                    class="text-sm md:text-base text-gray-600 dark:text-gray-300 leading-relaxed">
+                                </p>
+                            </div>
+
+                            <div class="bg-gray-50 dark:bg-gray-700/30 p-4 rounded-xl border border-gray-100 dark:border-gray-600">
+                                <span class="block text-xs text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider">
+                                    Inversión Mensual
+                                </span>
+                                <span id="modal-precio" class="text-2xl md:text-3xl font-bold text-primary dark:text-white mt-1 block">
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-4">
+                            
+                            <div>
+                                <h4 class="text-xs font-bold text-secondary dark:text-accent uppercase mb-2 flex items-center gap-2 tracking-wider">
+                                    <i class="fa-regular fa-clock"></i> Horarios Disponibles
+                                </h4>
+                                <div class="bg-surface-light dark:bg-gray-700/50 rounded-xl p-2 max-h-40 overflow-y-auto custom-scrollbar border border-gray-100 dark:border-gray-600/50">
+                                    <ul id="modal-lista-horarios" class="space-y-1 text-sm">
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col gap-3 mt-2">
+                                <div class="w-full h-48 md:h-56 bg-gray-200 rounded-xl overflow-hidden shadow-inner relative group">
+                                    <img id="modal-img-grande" src=""
+                                        class="w-full h-full object-cover cursor-zoom-in transition-all duration-500 group-hover:scale-110"
+                                        onclick="window.open(this.src, '_blank')">
+                                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors pointer-events-none"></div>
+                                </div>
+                                
+                                <div id="modal-miniaturas" class="flex gap-2 overflow-x-auto pb-2 custom-scrollbar">
+                                </div>
+                            </div>
+
+                            <button onclick="window.location.href='/registrar-usuario'"
+                                class="mt-2 w-full rounded-xl bg-highlight px-4 py-3.5 text-base font-bold text-white shadow-lg hover:bg-secondary hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-highlight transition-all transform hover:-translate-y-1 active:scale-95">
+                                ¡Inscribirme Ahora!
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="module" src="/js/modal-clase.js"></script>

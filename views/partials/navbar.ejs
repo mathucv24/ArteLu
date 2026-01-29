@@ -1,0 +1,62 @@
+<nav class="fixed top-0 w-full z-50 bg-primary text-white dark:bg-black shadow">
+    <div class="max-w-6xl mx-auto flex justify-between items-center p-4">
+        <div class="flex items-center gap-44">
+
+            <a href="/">
+                <img src="/assets/logo2.png" alt="Logo de ArteLu" class="w-20 h-20">
+            </a>
+
+            <button id="btn-menu-movil" type="button"
+                class="block md:hidden text-white focus:border focus:border-white rounded-lg p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="size-8">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="hidden md:flex gap-6 text-lg font-medium">
+            <a href="#nosotros" class="btn-iniciar-sesion w-fit p-2 rounded-lg text-lg font-bold">
+                Nosotros
+            </a>
+            <a href="#clases" class="btn-iniciar-sesion w-fit p-2 rounded-lg text-lg font-bold">
+                Clases
+            </a>
+            <a href="#actividades" class="btn-iniciar-sesion w-fit p-2 rounded-lg text-lg font-bold">
+                Actividades
+            </a>
+            <a href="/registrar-usuario" class="btn-iniciar-sesion w-fit p-2 rounded-lg text-lg font-bold">
+                Registrar Usuario
+            </a>
+            <a href="/iniciar-sesion" class="btn-iniciar-sesion w-fit p-2 rounded-lg text-lg font-bold">
+                Iniciar Sesion
+            </a>
+            <a href="/iniciar-sesion" class="btn-cerrar-sesion hidden w-fit p-2 rounded-lg text-lg font-bold">
+                Cerrar Sesion
+            </a>
+
+            <button id="themeToggle"><i class="fa-solid fa-moon"></i></button>
+
+        </div>
+    </div>
+
+
+    <div id="menu-movil"
+        class="hidden md:hidden bg-primary flex flex-col gap-2 transition-all duration-300">
+        <a href="/" class="btn-iniciar-sesion w-fit p-2 rounded-lg text-lg font-bold">
+            Inicio
+        </a>
+        <a href="/registrar-usuario" class="btn-iniciar-sesion w-fit p-2 rounded-lg text-lg font-bold">
+            Registrar Usuario
+        </a>
+        <a href="/iniciar-sesion" class="btn-iniciar-sesion w-fit p-2 rounded-lg text-lg font-bold">
+            Iniciar Sesion
+        </a>
+        <a href="/iniciar-sesion" class="btn-cerrar-sesion hidden w-fit p-2 rounded-lg text-lg font-bold">
+            Cerrar Sesion
+        </a>
+    </div>
+</nav>
+
+<script type="module" src="/js/navbar.js"></script>
