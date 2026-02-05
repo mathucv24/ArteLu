@@ -60,7 +60,7 @@ const registrarUsuario = async (req, res) => {
             <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
                 
                 <div style="background-color: #52054d; padding: 30px; text-align: center;">
-                    <img src="https://i.imgur.com/TuLogoAqui.png" alt="Logo ArteLu" style="max-width: 150px; height: auto;">
+                    <img src="https://www.canva.com/design/DAHAdrsuUCo/r4AkGvSdF0XK-XFRXZsObg/view" alt="Logo ArteLu" style="max-width: 150px; height: auto;">
                     <h1 style="color: #ffffff; margin-top: 10px; font-size: 24px;">Academia de Deportes Aéreos</h1>
                 </div>
 

@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const btnIniciarSesion = document.querySelectorAll('.btn-iniciar-sesion');
     const btnCerrarSesion = document.querySelectorAll('.btn-cerrar-sesion');
+    const btnPerfil = document.querySelectorAll('.btn-mi-perfil');
     
 
     if (localStorage.getItem('userToken')) {
@@ -21,6 +22,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         btnCerrarSesion.forEach(btn => {
+            btn.classList.toggle('hidden');
+        });
+
+        btnPerfil.forEach(btn => {
             btn.classList.toggle('hidden');
         });
 
@@ -46,4 +51,25 @@ document.addEventListener('DOMContentLoaded', () => {
             location.href = '/cerrar-sesion';
         })
     );
+
+    btnPerfil.forEach(btn =>
+
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            location.href = '/dashboard';
+        })
+    );
+    window.addEventListener('scroll', () => {
+        const nav = document.getElementById('main-navbar');
+        if (window.scrollY > 10) {
+            nav.classList.add('shadow-xl');
+            nav.classList.replace('bg-primary/95', 'bg-primary/80'); 
+            nav.classList.replace('dark:bg-gray-900/95', 'dark:bg-gray-900/80');
+        } else {
+            nav.classList.remove('shadow-xl');
+            nav.classList.replace('bg-primary/80', 'bg-primary/95');
+            nav.classList.replace('dark:bg-gray-900/80', 'dark:bg-gray-900/95');
+        }
+    });
 });

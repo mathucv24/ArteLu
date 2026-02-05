@@ -54,6 +54,15 @@ window.abrirModalClase = (id) => {
     }
 
     modalClase.classList.remove('hidden');
+    
+    const btnInscripcion = document.getElementById('btn-inscripcion');
+    if (localStorage.getItem('userToken')) {
+        btnInscripcion.onclick = () => {
+            window.location.href = `/dashboard`;
+        }
+    }
+
+    
 };
 
 window.cerrarModalClase = () => {

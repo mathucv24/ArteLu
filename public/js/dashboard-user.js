@@ -1,21 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // 1. LÓGICA DE PESTAÑAS (TABS)
-    // Se asigna a window para que el HTML pueda llamarla con onclick=""
     window.cambiarTab = (tabName) => {
-        // Ocultar todos los contenidos
         document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-        // Mostrar el contenido seleccionado
         const tabSeleccionado = document.getElementById(`view-${tabName}`);
         if(tabSeleccionado) tabSeleccionado.classList.remove('hidden');
 
-        // Resetear estilos de botones (inactivos)
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.classList.remove('bg-primary', 'text-white', 'shadow-lg');
             btn.classList.add('bg-white', 'text-gray-600', 'hover:bg-gray-100');
         });
 
-        // Activar estilo del botón seleccionado
         const activeBtn = document.getElementById(`tab-${tabName}`);
         if (activeBtn) {
             activeBtn.classList.remove('bg-white', 'text-gray-600', 'hover:bg-gray-100');
@@ -23,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // 2. LÓGICA DEL PERFIL (EDICIÓN Y GUARDADO)
     const vistaEstatica = document.getElementById('vista-estatica');
     const formEdicion = document.getElementById('form-actualizar-perfil');
     const btnEditar = document.getElementById('btn-habilitar-edicion');
@@ -35,7 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const checkRepresentante = document.getElementById('check-representante');
     const seccionAlumno = document.getElementById('seccion-alumno');
 
-    // Listener para mostrar/ocultar campos de alumno si es representante
     if(checkRepresentante){
         checkRepresentante.addEventListener('change', () => {
             if (checkRepresentante.checked) {
@@ -49,7 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const togglePantallasEdicion = () => {
         vistaEstatica.classList.toggle('hidden');
         formEdicion.classList.toggle('hidden');
-        // Scroll suave al inicio al cambiar de modo
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
@@ -60,7 +51,6 @@ document.addEventListener('DOMContentLoaded', () => {
         formEdicion.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            // UI de carga
             btnGuardar.disabled = true;
             btnTexto.innerText = "Guardando...";
             btnSpinner.classList.remove('hidden');
@@ -86,7 +76,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 if (res.ok) {
-                    // Actualizar la vista estática "al vuelo" para no recargar la página
                     document.getElementById('label-nombre').innerText = data.nombre;
                     document.getElementById('label-telefono').innerText = data.telefono;
                     document.getElementById('label-lesiones').innerText = data.lesiones || 'Ninguna registrada';
@@ -123,9 +112,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 3. LÓGICA DE FORMULARIO DE PAGO (ARCHIVO Y DISCIPLINAS)
-    
-    // Feedback visual al seleccionar archivo
     const fileInput = document.getElementById('dropzone-file');
     const fileTextContainer = document.querySelector('label[for="dropzone-file"] p'); 
     
@@ -138,7 +124,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Carga dinámica de disciplinas y validación de cantidad
     const contenedorDisciplinas = document.getElementById('contenedor-disciplinas');
     const selectFrecuencia = document.getElementById('select-frecuencia');
     const inputHiddenDisciplinas = document.getElementById('input-disciplinas-seleccionadas');
