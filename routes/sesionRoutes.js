@@ -1,12 +1,14 @@
 import { Router } from "express";
-import { 
+import {
     registrarUsuario,
     verificarUsuario,
     iniciarSesion,
-    actualizarPerfil, 
-    obtenerTodosLosUsuarios, 
-    obtenerDetalleUsuarioAdmin, 
-    cambiarEstadoUsuario
+    actualizarPerfil,
+    obtenerTodosLosUsuarios,
+    obtenerDetalleUsuarioAdmin,
+    cambiarEstadoUsuario,
+    solicitarRecuperacion,
+    restablecerPassword
 
 } from '../controllers/sesionController.js';
 
@@ -21,4 +23,6 @@ sesionRoutes.get('/todos-los-usuarios', obtenerTodosLosUsuarios);
 sesionRoutes.get('/usuario-detalle/:id', obtenerDetalleUsuarioAdmin);
 sesionRoutes.put('/cambiar-estado/:id', cambiarEstadoUsuario);
 sesionRoutes.post('/verificar-usuario', verificarUsuario);
+sesionRoutes.post('/solicitar-recuperacion', solicitarRecuperacion);
+sesionRoutes.put('/restablecer-password', restablecerPassword);
 export default sesionRoutes;

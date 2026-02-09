@@ -1,19 +1,22 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     const validarInput = (input, valor, expresionRegular) => {
+        const clasesNormales = ['border-gray-200', 'dark:border-gray-600', 'focus:border-secondary'];
+        const clasesExito = ['border-green-500', 'ring-1', 'ring-green-500', 'bg-green-50'];
+        const clasesError = ['border-red-500', 'ring-1', 'ring-red-500', 'bg-red-50'];
+
+        input.classList.remove(...clasesExito, ...clasesError);
 
         if (expresionRegular.test(valor)) {
-            input.classList.remove('outline-red-500');
-            input.classList.add('outline-green-500');
+            input.classList.remove(...clasesNormales); 
+            input.classList.add(...clasesExito); 
             return true;
-        } else if (valor == 0) {
-            input.classList.remove('outline-red-500');
-            input.classList.remove('outline-green-500');
+        } else if (valor.length == 0) {
+            input.classList.add(...clasesNormales);
             return false;
-        }
-        else {
-            input.classList.add('outline-red-500');
-            input.classList.remove('outline-green-500');
+        } else {
+            input.classList.remove(...clasesNormales);
+            input.classList.add(...clasesError); 
             return false;
         }
     }

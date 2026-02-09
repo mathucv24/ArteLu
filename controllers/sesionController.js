@@ -60,8 +60,10 @@ const registrarUsuario = async (req, res) => {
             <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
                 
                 <div style="background-color: #52054d; padding: 30px; text-align: center;">
-                    <img src="https://www.canva.com/design/DAHAdrsuUCo/r4AkGvSdF0XK-XFRXZsObg/view" alt="Logo ArteLu" style="max-width: 150px; height: auto;">
-                    <h1 style="color: #ffffff; margin-top: 10px; font-size: 24px;">Academia de Deportes Aéreos</h1>
+                    <h1 style="color: #ffffff; margin-top: 10px; font-size: 36px; font-weight: bold;">
+                        ArteLu
+                    </h1>
+                    <h2 style="color: #ffffff; margin-top: 10px; font-size: 24px;">Academia de Deportes Aéreos</h2>
                 </div>
 
                 <div style="padding: 40px 30px; text-align: center; color: #333333;">
@@ -113,8 +115,8 @@ const registrarUsuario = async (req, res) => {
             from: '"ArteLu Academia de Deportes Aereos" <arteluaerial@gmail.com>',
             to: email,
             subject: "Código de Verificación - ArteLu",
-            text: `<b>Tu código de verificación es: ${codigo}. Gracias por atreverte a volar!`, 
-            html: htmlContent 
+            text: `<b>Tu código de verificación es: ${codigo}. Gracias por atreverte a volar!`,
+            html: htmlContent
         });
 
         return res.status(201).json({
@@ -122,6 +124,7 @@ const registrarUsuario = async (req, res) => {
             requiereVerificacion: true,
             email: email
         });
+
 
     } catch (error) {
         console.error("ERROR EN REGISTRO:", error);
@@ -163,13 +166,13 @@ const iniciarSesion = async (req, res) => {
     const { email, password } = req.body;
 
     if (!email) {
-        return res.json({
+        return res.status(400).json({ 
             mensaje: 'El correo es obligatorio'
         });
     }
 
     if (!password) {
-        return res.json({
+        return res.status(400).json({ 
             mensaje: 'La contraseña es obligatoria'
         });
     }
@@ -177,7 +180,7 @@ const iniciarSesion = async (req, res) => {
     const usuario = await Usuario.findOne({ email });
 
     if (!usuario) {
-        return res.json({
+        return res.status(404).json({ 
             mensaje: 'No existe un usuario con ese correo'
         });
     }
@@ -187,7 +190,7 @@ const iniciarSesion = async (req, res) => {
     const estaValidado = await bycrypt.compare(password, passwordEncriptado);
 
     if (!estaValidado) {
-        return res.json({
+        return res.status(401).json({ 
             mensaje: 'Las credenciales son incorrectas'
         });
     }
@@ -198,7 +201,7 @@ const iniciarSesion = async (req, res) => {
             email: usuario.email,
             rol: usuario.rol
         },
-        process.env.JWT_SECRET,
+        process.env.JWT_SECRET || 'secret',
         {
             expiresIn: '3600000'
         },
@@ -207,13 +210,13 @@ const iniciarSesion = async (req, res) => {
     res.cookie('userToken', userToken, {
         httpOnly: true,
         maxAge: 3600000,
-    })
+    });
 
     res.json({
         mensaje: 'Se ha iniciado sesion correctamente',
-        token: userToken
+        token: userToken,
+        rol: usuario.rol 
     });
-
 }
 
 const actualizarPerfil = async (req, res) => {
@@ -293,6 +296,70 @@ const cambiarEstadoUsuario = async (req, res) => {
     }
 };
 
+const solicitarRecuperacion = async (req, res) => {
+    try {
+        const { email } = req.body;
+        const usuario = await Usuario.findOne({ email });
+
+        if (!usuario) {
+            return res.status(404).json({ mensaje: 'No existe un usuario con este correo.' });
+        }
+
+        const codigo = Math.floor(100000 + Math.random() * 900000).toString();
+
+        usuario.codigoRecuperacion = codigo;
+        await usuario.save();
+
+        await transporter.sendMail({
+            from: '"ArteLu Academia de Deportes Aereos" <arteluaerial@gmail.com>',
+            to: email,
+            subject: "Recuperación de Contraseña - ArteLu",
+            html: `
+                <div style="font-family: sans-serif; padding: 20px;">
+                    <h2>Recupera tu acceso</h2>
+                    <p>Usa el siguiente código para restablecer tu contraseña:</p>
+                    <h1 style="color: #52054d; letter-spacing: 5px;">${codigo}</h1>
+                    <p>Si no solicitaste esto, ignora este mensaje.</p>
+                </div>
+            `
+        });
+
+        res.json({ mensaje: 'Código enviado a tu correo.' });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ mensaje: 'Error al enviar el correo.' });
+    }
+};
+
+const restablecerPassword = async (req, res) => {
+    try {
+        const { email, codigo, newPassword } = req.body;
+
+        const usuario = await Usuario.findOne({ email });
+
+        if (!usuario) {
+            return res.status(404).json({ mensaje: 'Usuario no encontrado.' });
+        }
+
+        if (usuario.codigoRecuperacion !== codigo) {
+            return res.status(400).json({ mensaje: 'El código es incorrecto.' });
+        }
+
+        const passwordEncriptado = await bycrypt.hash(newPassword, 10);
+
+        usuario.password = passwordEncriptado;
+        usuario.codigoRecuperacion = null; 
+        await usuario.save();
+
+        res.json({ mensaje: 'Contraseña restablecida exitosamente.' });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ mensaje: 'Error al actualizar contraseña.' });
+    }
+};
+
 export {
     registrarUsuario,
     verificarUsuario,
@@ -300,5 +367,7 @@ export {
     actualizarPerfil,
     obtenerTodosLosUsuarios,
     obtenerDetalleUsuarioAdmin,
-    cambiarEstadoUsuario
+    cambiarEstadoUsuario,
+    solicitarRecuperacion,
+    restablecerPassword
 };

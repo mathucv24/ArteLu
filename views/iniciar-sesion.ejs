@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="es" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ArteLu | Academia de Deportes Aéreos</title>
+    <title>ArteLu | Iniciar Sesión</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -24,48 +24,125 @@
             }
         }
     </script>
-
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-
     <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="icon" href="/assets/logo.png" type="Logo de ArteLu" />
+
 </head>
 
-<body class="bg-lightbg text-primary dark:bg-gray-900 dark:text-neutralgray transition-colors duration-500">
-    <%- include ('./partials/alert.ejs') %>
-    <%- include ('./partials/navbar.ejs') %>
-   <div class="w-full flex flex-grow flex-col  items-center my-20 px-8 py-16 md:my-28 md:px-36">
-        <div class="w-full rounded-lg shadow-lg bg-primary p-8 m-20">
-            <h1 class="text-5xl font-extrabold font-style: italic mb-10 font-mono md:px-16 text-white">
-                Iniciar sesion
-            </h1>
-            <form class="w-full flex flex-col gap-5 mt-4 px-4 md:px-16" id="iniciar-sesion-form">
-                <div class="w-full flex flex-col gap-2">
-                    <label class="text-white" for="email">
-                        Email
-                    </label>
-                    <input class="bg-white rounded-lg h-8" type="email" name="email" id="email" placeholder="ejemplo@correo.com">
-                </div>
-                <div class="w-full flex flex-col gap-2">
-                    <label class="text-white" for="password">
-                        Contraseña
-                    </label>
-                    <input class="bg-white rounded-lg h-8" type="password" name="password" id="password">
-                </div>
-                <button 
-                class=" items-center md:items-start w-fit p-2 rounded-lg bg-accent hover:bg-secondary hover:text-white text-black items-center font-bold" 
-                type="submit"
-                >
-                    Iniciar sesion
-                </button>
-            </form>
-        </div>
-   </div>
-   <%- include ('./partials/footer.ejs') %>
+<body class="bg-pattern text-primary dark:bg-gray-900 dark:text-neutralgray transition-colors duration-500">
 
-<script type="module" src="/js/iniciar-sesion.js"></script>
-<script src="/js/alert.js"></script>
+    <div class="fixed inset-0 bg-lightbg/90 dark:bg-gray-900/90 -z-10 pointer-events-none"></div>
+
+    <%- include ('./partials/alert.ejs') %>
+        <%- include ('./partials/navbar.ejs') %>
+
+            <div class="min-h-screen flex items-center justify-center p-4 py-24 md:py-32 fade-in">
+
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden w-full max-w-4xl flex flex-col md:flex-row border border-white/20">
+
+                    <div
+                        class="hidden md:flex md:w-1/2 bg-primary relative flex-col justify-center p-10 text-white overflow-hidden items-center text-center">
+                        <div class="absolute inset-0 bg-cover bg-center opacity-50 mix-blend-overlay"
+                            style="background-image: url('/assets/hero4.png');"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-primary via-secondary/80 to-primary/90">
+                        </div>
+
+                        <div class="relative z-10 space-y-6">
+                            <div
+                                class="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center mx-auto backdrop-blur-md border border-white/20 shadow-lg">
+                                <img src="/assets/logo2.png" alt="Logo" class="w-12 h-12 object-contain">
+                            </div>
+
+                            <div>
+                                <h2 class="text-3xl font-extrabold mb-2">
+                                    ¡Bienvenido de nuevo!
+                                </h2>
+                                <p class="text-accent/90 text-sm max-w-xs mx-auto">
+                                    Continúa tu entrenamiento y alcanza nuevas alturas con ArteLu.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full md:w-1/2 p-8 md:p-12 relative flex flex-col justify-center">
+
+                        <div class="text-center mb-8">
+                            <h1 class="text-3xl font-bold text-primary dark:text-white mb-2">
+                                Iniciar Sesión
+                            </h1>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm">
+                                Ingresa tus credenciales para acceder.
+                            </p>
+                        </div>
+
+                        <form id="iniciar-sesion-form" class="space-y-6">
+
+                            <div class="space-y-1">
+                                <label class="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1" for="email">
+                                    Correo Electrónico
+                                </label>
+                                <div class="relative">
+                                    <div
+                                        class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                                        <i class="fa-regular fa-envelope"></i>
+                                    </div>
+                                    <input
+                                        class="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition-all placeholder:text-gray-400"
+                                        type="email" name="email" id="email" placeholder="ejemplo@correo.com">
+                                </div>
+                            </div>
+
+                            <div class="space-y-1">
+                                <div class="flex justify-between items-center px-1">
+                                    <label class="text-sm font-semibold text-gray-700 dark:text-gray-300"
+                                        for="password">
+                                        Contraseña
+                                    </label>
+                                    <a href="#" id="btn-olvide-pass"
+                                        class="text-xs text-secondary hover:text-highlight font-medium transition-colors">
+                                        ¿Olvidaste tu contraseña?
+                                    </a>
+                                </div>
+                                <div class="relative">
+                                    <div
+                                        class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                                        <i class="fa-solid fa-lock"></i>
+                                    </div>
+                                    <input
+                                        class="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition-all placeholder:text-gray-400"
+                                        type="password" name="password" id="password" placeholder="••••••••">
+                                </div>
+                            </div>
+
+                            <button type="submit" id="btn-submit"
+                                class="w-full py-3.5 rounded-xl bg-gradient-to-r from-secondary to-primary text-white font-bold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 flex justify-center items-center gap-2 group">
+                                <span>
+                                    Ingresar
+                                </span>
+                                <i
+                                    class="fa-solid fa-arrow-right-to-bracket group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+
+                            <div class="text-center mt-6 pt-6 border-t border-gray-100 dark:border-gray-700">
+                                <p class="text-sm text-gray-500">
+                                    ¿Aún no eres alumno?
+                                    <a href="/registrar-usuario"
+                                        class="text-secondary font-bold hover:underline hover:text-highlight transition-colors">
+                                        Registrate aquí
+                                    </a>
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <%- include ('./partials/recuperarPass.ejs') %>
+            <%- include ('./partials/footer.ejs') %>
 
 </body>
+<script type="module" src="/js/iniciar-sesion.js"></script>
+<script src="/js/alert.js"></script>
 
 </html>

@@ -59,6 +59,10 @@ const usuarioSchema = new mongoose.Schema({
     codigoVerificacion: {
         type: Number, 
         default: null
+    },
+    codigoRecuperacion: {
+        type: String,
+        default: null
     }
 }, 
 {

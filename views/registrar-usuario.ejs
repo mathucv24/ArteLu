@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="es" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ArteLu | Academia de Deportes Aéreos</title>
+    <title>ArteLu | Registro de Usuario</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -24,103 +24,221 @@
             }
         }
     </script>
-
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-
     <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="icon" href="/assets/logo.png" type="Logo de ArteLu" />
+
+    
 </head>
 
-<body class="bg-lightbg text-primary dark:bg-gray-900 dark:text-neutralgray transition-colors duration-500">
-    <%- include ('./partials/alert.ejs') %>
-        <%- include ('./partials/navbar.ejs') %>
+<body class="bg-pattern text-primary dark:bg-gray-900 dark:text-neutralgray transition-colors duration-500">
 
-            <div class="w-full flex flex-grow flex-col items-center px-2 py-16 my-4 md:my-28 md:px-16">
-                <div class="w-full rounded-lg shadow-2xl bg-primary p-10 m-10">
-                    <h1 class="text-5xl font-extrabold font-style: italic mb-10 font-mono text-white">
-                        Registrar usuario
-                    </h1>
-                    <form class="w-full flex flex-col gap-5 mt-6 px-6 items-center md:items-start md:px-16"
-                        id="registrar-usuario-form">
-                        <div class="w-full flex flex-col gap-2">
-                            <label class="text-white" for="nombre">
-                                Nombre
-                            </label>
-                            <input class="bg-white rounded-lg h-8" type="text" name="nombre" id="nombre"
-                                placeholder="Ingrese su nombre y su apellido">
+    <div class="fixed inset-0 bg-lightbg/90 dark:bg-gray-900/90 -z-10 pointer-events-none"></div>
+
+    <%- include ('./partials/alert.ejs') %>
+    <%- include ('./partials/navbar.ejs') %>
+
+    <div class="min-h-screen flex items-center justify-center p-4 py-24 md:py-32 fade-in">
+
+        <div
+            class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden w-full max-w-5xl flex flex-col md:flex-row border border-white/20">
+
+            <div
+                class="hidden md:flex md:w-5/12 bg-primary relative flex-col justify-between p-10 text-white overflow-hidden">
+                
+                <div
+                    class="absolute inset-0 bg-gradient-to-br from-primary via-secondary to-primary opacity-90">
+                </div>
+
+                <div class="relative z-10">
+                    <a href="/" class="flex items-center justify-center gap-2 mb-8">
+                        <img src="/assets/Letras.png" alt="Logo" class="w-42 h-16 opacity-90 brightness-125">
+                    </a>
+                    <h2 class="text-4xl font-extrabold mb-4 leading-tight">
+                        Comienza tu viaje aéreo hoy.
+                    </h2>
+                    <p class="text-accent/90 text-lg">
+                        Únete a nuestra comunidad y descubre lo que tu cuerpo es capaz de hacer.
+                    </p>
+                    <p class="text-accent/90 font-bold text-xl mt-6">
+                        ¡Atrévete a volar! 
+                    </p>
+                </div>
+
+                <div class="relative z-10 mt-auto">
+                    <div class="flex items-center gap-4 text-sm text-accent/80">
+                        <div class="flex -space-x-2">
+                            <div class="w-8 h-8 rounded-full bg-gray-300 border-2 border-primary"></div>
+                            <div class="w-8 h-8 rounded-full bg-gray-400 border-2 border-primary"></div>
+                            <div class="w-8 h-8 rounded-full bg-gray-500 border-2 border-primary"></div>
                         </div>
-                        <div class="w-full flex flex-col gap-2">
-                            <label class="text-white" for="telefono">
+                        <p>+200 alumnos activos</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full md:w-7/12 p-8 md:p-12 relative">
+                <div class="text-center md:text-left mb-8">
+                    <h1 class="text-3xl font-bold text-primary dark:text-white mb-2">
+                        Crear Cuenta
+                    </h1>
+                    <p class="text-gray-500 dark:text-gray-400">
+                        Completa tus datos para registrarte en la academia.
+                    </p>
+                </div>
+
+                <form id="registrar-usuario-form" class="space-y-5">
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="space-y-1">
+                            <label class="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1" for="nombre">
+                                Nombre Completo
+                            </label>
+                            <div class="relative">
+                                <div
+                                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                                    <i class="fa-regular fa-user"></i>
+                                </div>
+                                <input
+                                    class="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition-all"
+                                    type="text" name="nombre" id="nombre" placeholder="Tu nombre">
+                            </div>
+                        </div>
+
+                        <div class="space-y-1">
+                            <label class="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1" for="telefono">
                                 Teléfono
                             </label>
-                            <input class="bg-white rounded-lg h-8" type="text" name="telefono" id="telefono"
-                                placeholder="Ingrese su telefono con whatsapp preferiblemente">
+                            <div class="relative">
+                                <div
+                                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                                    <i class="fa-brands fa-whatsapp"></i>
+                                </div>
+                                <input
+                                    class="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition-all"
+                                    type="text" name="telefono" id="telefono" placeholder="Ej: 04141234567">
+                            </div>
                         </div>
-                        <div class="w-full flex flex-col gap-2">
-                            <label class="text-white" for="email">
-                                Email
-                            </label>
-                            <input class="bg-white rounded-lg h-8" type="email" name="email" id="email"
-                                placeholder="Ingrese su correo electrónico">
-                        </div>
-                        <div class="w-full flex flex-col gap-2">
-                            <label class="text-white" for="password">
-                                Contraseña
-                            </label>
-                            <input class="bg-white rounded-lg h-8" type="password" name="password" id="password">
-                        </div>
-                        <p class="text-white font-thin text-sm">* Debe tener mas de 6 caracteres</p>
-                        <p class="text-white font-thin text-sm">* Debe tener caracteres y numeros</p>
-                        <p class="text-white font-thin text-sm">* Debe contener al menos un caracter especial</p>
-                        <p class="text-white font-thin text-sm">* Debe contener al menos una mayuscula</p>
-                        <p class="text-white font-thin text-sm">* Ambas contraseñas deben coincidir</p>
-                        <div class="w-full flex flex-col gap-2">
-                            <label class="text-white" for="repassword">
-                                Repetir Contraseña
-                            </label>
-                            <input class="bg-white rounded-lg h-8" type="password" name="repassword" id="repassword">
-                        </div>
-                        <button id="btn-submit" disabled
-                            class="w-fit p-2 rounded-lg bg-gray-100 hover:bg-gray-50 text-black font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
-                            type="submit">
-                            Registrar
-                        </button>
-                    </form>
-
-                </div>
-            </div>
-
-            <div id="modal-verificacion"
-                class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center backdrop-blur-sm">
-                <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-2xl w-96 flex flex-col gap-4 relative">
-                    <button id="btn-cerrar-modal"
-                        class="absolute top-2 right-4 text-gray-500 hover:text-red-500 font-bold text-xl">
-                        &times;
-                    </button>
-
-                    <h2 class="text-2xl font-bold text-primary dark:text-accent text-center">
-                        Verificar Cuenta
-                    </h2>
-                    <p class="text-gray-600 dark:text-gray-300 text-center text-sm">
-                        Hemos enviado un código a tu correo electrónico.
-                    </p>
-
-                    <div class="flex flex-col gap-2">
-                        <label class="text-primary dark:text-white font-semibold">
-                            Código de 6 dígitos
-                        </label>
-                        <input type="text" id="input-codigo" maxlength="6"
-                            class="border-2 border-gray-300 rounded-lg p-2 text-center text-xl tracking-widest focus:border-secondary focus:outline-none dark:bg-gray-700 dark:text-white transition-colors">
                     </div>
 
-                    <button id="btn-verificar-codigo"
-                        class="bg-primary hover:bg-highlight text-white font-bold py-2 px-4 rounded-lg transition-colors mt-2">
-                        Confirmar Código
+                    <div class="space-y-1">
+                        <label class="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1" for="email">
+                            Correo Electrónico
+                        </label>
+                        <div class="relative">
+                            <div
+                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                                <i class="fa-regular fa-envelope"></i>
+                            </div>
+                            <input
+                                class="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition-all"
+                                type="email" name="email" id="email" placeholder="ejemplo@correo.com">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="space-y-1">
+                            <label class="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1" for="password">
+                                Contraseña
+                            </label>
+                            <div class="relative">
+                                <div
+                                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                                    <i class="fa-solid fa-lock"></i>
+                                </div>
+                                <input
+                                    class="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition-all"
+                                    type="password" name="password" id="password" placeholder="••••••••">
+                            </div>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1" for="repassword">
+                                Repetir Contraseña
+                            </label>
+                            <div class="relative">
+                                <div
+                                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                                    <i class="fa-solid fa-lock"></i>
+                                </div>
+                                <input
+                                    class="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition-all"
+                                    type="password" name="repassword" id="repassword" placeholder="••••••••">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-xl border border-gray-100 dark:border-gray-700 text-xs text-gray-500 dark:text-gray-400">
+                        <p class="font-bold mb-2 text-primary dark:text-accent">
+                            Tu contraseña debe incluir:
+                        </p>
+                        <ul class="grid grid-cols-1 sm:grid-cols-2 gap-1 list-disc pl-4">
+                            <li>Mínimo 6 caracteres</li>
+                            <li>Al menos una mayúscula</li>
+                            <li>Letras y números</li>
+                            <li>Un carácter especial (@$!%*?&)</li>
+                        </ul>
+                    </div>
+
+                    <button id="btn-submit" disabled
+                        class="w-full py-4 rounded-xl bg-gradient-to-r from-secondary to-primary text-white font-bold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none flex justify-center items-center gap-2 group">
+                        <span>
+                            Crear Cuenta
+                        </span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
                     </button>
+
+                    <p class="text-center text-sm text-gray-500 mt-4">
+                        ¿Ya tienes cuenta?
+                        <a href="/iniciar-sesion" class="text-secondary font-bold hover:underline">
+                            Inicia Sesión
+                        </a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-verificacion"
+        class="hidden fixed inset-0 bg-black/60 z-50 flex justify-center items-center backdrop-blur-sm p-4 transition-opacity duration-300">
+        <div
+            class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-2xl w-full max-w-md flex flex-col gap-6 relative transform transition-all scale-100">
+
+            <button id="btn-cerrar-modal"
+                class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-red-100 text-gray-500 hover:text-red-500 transition-colors">
+                <i class="fa-solid fa-times"></i>
+            </button>
+
+            <div class="text-center">
+                <div
+                    class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 text-primary text-3xl">
+                    <i class="fa-solid fa-envelope-open-text"></i>
                 </div>
+                <h2 class="text-2xl font-extrabold text-primary dark:text-white mb-2">
+                    Verifica tu Correo
+                </h2>
+                <p class="text-gray-600 dark:text-gray-300 text-sm px-4">
+                    Hemos enviado un código de 6 dígitos a tu correo. Por favor ingrésalo para continuar.
+                </p>
             </div>
 
-            <%- include ('./partials/footer.ejs') %>
+            <div class="space-y-2">
+                <label class="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">
+                    Código de Verificación
+                </label>
+                <input type="text" id="input-codigo" maxlength="6"
+                    class="w-full border-2 border-gray-200 rounded-xl p-4 text-center text-3xl font-mono tracking-[0.5em] text-primary focus:border-secondary focus:ring-0 outline-none transition-colors placeholder:text-gray-200"
+                    placeholder="000000">
+            </div>
+
+            <button id="btn-verificar-codigo"
+                class="w-full bg-secondary hover:bg-primary text-white font-bold py-4 rounded-xl shadow-lg transition-all transform hover:-translate-y-1">
+                Confirmar y Acceder
+            </button>
+        </div>
+    </div>
+
+    <%- include ('./partials/footer.ejs') %>
 </body>
 <script type="module" src="/js/registrar-usuario.js"></script>
 <script src="/js/alert.js"></script>

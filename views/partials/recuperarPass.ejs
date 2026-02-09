@@ -1,0 +1,71 @@
+<div id="modal-recuperar"
+    class="hidden fixed inset-0 bg-black/60 z-50 flex justify-center items-center backdrop-blur-sm p-4 transition-opacity duration-300">
+    <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-2xl w-full max-w-md relative overflow-hidden">
+
+        <button id="btn-cerrar-recuperar"
+            class="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors">
+            <i class="fa-solid fa-times text-xl"></i>
+        </button>
+
+        <div id="step-1-email" class="transition-all duration-500">
+            <div class="text-center mb-6">
+                <div
+                    class="w-14 h-14 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">
+                    <i class="fa-solid fa-key"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-primary dark:text-white">
+                    Recuperar Acceso
+                </h3>
+                <p class="text-gray-500 text-sm mt-2">
+                    Ingresa tu correo para recibir un código de seguridad.
+                </p>
+            </div>
+
+            <form id="form-request-code" class="space-y-4">
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase ml-1">
+                        Correo Electrónico
+                    </label>
+                    <input type="email" id="recup-email" required placeholder="tu@email.com"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-secondary outline-none">
+                </div>
+                <button type="submit" id="btn-send-code"
+                    class="w-full bg-secondary hover:bg-primary text-white font-bold py-3 rounded-xl transition-all">
+                    Enviar Código
+                </button>
+            </form>
+        </div>
+
+        <div id="step-2-reset" class="hidden translate-x-full transition-all duration-500">
+            <div class="text-center mb-4">
+                <h3 class="text-xl font-bold text-primary dark:text-white">Restablecer Contraseña</h3>
+                <p class="text-gray-500 text-xs mt-1">Revisa tu correo e ingresa el código.</p>
+            </div>
+
+            <form id="form-reset-pass" class="space-y-3">
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase ml-1">Código (6 dígitos)</label>
+                    <input type="text" id="recup-codigo" maxlength="6" required placeholder="000000"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-3 text-center text-xl tracking-widest font-mono focus:ring-2 focus:ring-secondary outline-none">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase ml-1">Nueva Contraseña</label>
+                    <input type="password" id="recup-pass" required placeholder="Nueva contraseña"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-secondary outline-none">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase ml-1">Confirmar Contraseña</label>
+                    <input type="password" id="recup-repass" required placeholder="Repetir contraseña"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-secondary outline-none">
+                </div>
+
+                <button type="submit" id="btn-reset-pass"
+                    class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl transition-all mt-2">
+                    Cambiar Contraseña
+                </button>
+            </form>
+        </div>
+
+    </div>
+</div>
+<script src="/js/recuperarPass.js"></script>
