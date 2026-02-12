@@ -8,6 +8,7 @@ import sesionRoutes from './routes/sesionRoutes.js';
 import cookieParser from 'cookie-parser';
 import disciplinasRoutes from './routes/disciplinasRoutes.js';
 import teamRoutes from './routes/teamRoutes.js';
+import actividadesRoutes from './routes/actividadesRoutes.js';
 
 
 
@@ -38,6 +39,7 @@ app.use('/api/sesion', sesionRoutes);
 app.use('/api', disciplinasRoutes);
 app.use('/api/pagos', pagoRoutes);
 app.use('/api/team', teamRoutes);
+app.use('/api', actividadesRoutes);
 
 app.post('/registrar-pago', (req, res) => {
     res.redirect(307, '/api/pagos/registrar'); 

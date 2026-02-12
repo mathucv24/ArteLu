@@ -352,7 +352,7 @@ async function cargarListaEquipo() {
 
     try {
         const res = await fetch('/api/team/ver-team');
-        listaDocentes = await res.json(); 
+        listaDocentes = await res.json();
 
         if (!listaDocentes || listaDocentes.length === 0) {
             contenedor.innerHTML = '<p class="text-gray-500 text-center py-4">No hay docentes registrados.</p>';
@@ -395,8 +395,8 @@ window.abrirModalEditarEquipo = (id) => {
     document.getElementById('edit-team-nombre').value = docente.nombre;
     document.getElementById('edit-team-cargo').value = docente.cargo;
     document.getElementById('edit-team-descripcion').value = docente.descripcion;
-    
-    document.getElementById('edit-team-imagen').value = ""; 
+
+    document.getElementById('edit-team-imagen').value = "";
 
     document.getElementById('modal-editar-equipo').classList.remove('hidden');
 };
@@ -420,13 +420,13 @@ if (formEditarEquipo) {
         try {
             const res = await fetch('/api/team/actualizar-miembro', {
                 method: 'PUT',
-                body: formData 
+                body: formData
             });
 
             if (res.ok) {
                 mostrarAlerta(false, "Docente actualizado correctamente");
                 document.getElementById('modal-editar-equipo').classList.add('hidden');
-                cargarListaEquipo(); 
+                cargarListaEquipo();
             } else {
                 const data = await res.json();
                 mostrarAlerta(true, "Error: " + data.mensaje);
@@ -712,7 +712,7 @@ window.actualizarEstadoPago = async (id, nuevoEstado) => {
 
     if (nuevoEstado === 'aprobado') {
         pagoIdSeleccionado = id;
-        
+
         const hoy = new Date();
         document.getElementById('select-mes-pago').value = hoy.getMonth();
         document.getElementById('input-anio-pago').value = hoy.getFullYear();
@@ -726,9 +726,9 @@ if (formAprobar) {
         e.preventDefault();
         const mes = document.getElementById('select-mes-pago').value;
         const anio = document.getElementById('input-anio-pago').value;
-        
+
         enviarActualizacionPago(pagoIdSeleccionado, 'aprobado', mes, anio);
-        
+
         document.getElementById('modal-aprobar-pago').classList.add('hidden');
     });
 }
@@ -736,7 +736,7 @@ if (formAprobar) {
 async function enviarActualizacionPago(id, estado, mes = null, anio = null) {
     try {
         const bodyData = { estado };
-        
+
         if (mes !== null && anio !== null) {
             bodyData.mesCorrespondiente = Number(mes);
             bodyData.anioCorrespondiente = Number(anio);
@@ -750,11 +750,11 @@ async function enviarActualizacionPago(id, estado, mes = null, anio = null) {
 
         if (res.ok) {
             mostrarAlerta(false, `Pago ${estado} correctamente`);
-            cargarPagos(); 
-            
+            cargarPagos();
+
             const modalUsuario = document.getElementById('modal-usuario-detalle');
             if (!modalUsuario.classList.contains('hidden')) {
-               document.getElementById('modal-usuario-detalle').classList.add('hidden');
+                document.getElementById('modal-usuario-detalle').classList.add('hidden');
             }
         } else {
             mostrarAlerta(true, 'Error al actualizar estado');
@@ -763,3 +763,84 @@ async function enviarActualizacionPago(id, estado, mes = null, anio = null) {
         mostrarAlerta(true, 'Error de conexión');
     }
 }
+
+
+const formActividad = document.getElementById('crear-actividad-form');
+
+if (formActividad) {
+    cargarActividadesAdmin();
+
+    formActividad.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(formActividad);
+        formData.set('activa', document.getElementById('act-activa').checked);
+
+        try {
+            const res = await fetch('/api/crear-actividad', { method: 'POST', body: formData });
+            if (res.ok) {
+                mostrarAlerta(false, 'Actividad creada');
+                formActividad.reset();
+                cargarActividadesAdmin();
+            } else {
+                mostrarAlerta(true, 'Error al crear');
+            }
+        } catch (error) {
+            mostrarAlerta(true, 'Error de conexión');
+        }
+    });
+}
+
+async function cargarActividadesAdmin() {
+    const contenedor = document.getElementById('lista-actividades-admin');
+    if (!contenedor) return;
+
+    try {
+        const res = await fetch('/api/ver-actividades?admin=true');
+        const actividades = await res.json();
+
+        if (actividades.length === 0) {
+            contenedor.innerHTML = '<p class="col-span-2 text-center text-gray-400">No hay actividades.</p>';
+            return;
+        }
+
+        contenedor.innerHTML = actividades.map(act => {
+
+            let colorBadge = "bg-accent/20 text-secondary"; 
+            if (act.tipo === 'Promoción') colorBadge = "bg-yellow-100 text-yellow-700";
+            if (act.tipo === 'Competencia') colorBadge = "bg-red-100 text-red-700";
+
+            return `
+        <div class="flex gap-3 border p-3 rounded-lg bg-gray-50 relative group">
+            <img src="${act.imagen?.url || '/assets/logo.png'}" class="w-20 h-20 object-cover rounded-md bg-gray-200">
+            <div class="flex-1">
+                <div class="flex justify-between items-start">
+                    <h4 class="font-bold text-primary leading-tight">${act.titulo}</h4>
+                    <button onclick="eliminarActividad('${act._id}')" class="text-red-400 hover:text-red-600">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+                
+                <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded ${colorBadge}">
+                    ${act.tipo}
+                </span>
+
+                <p class="text-xs text-gray-500 mt-1">
+                    <i class="fa-regular fa-calendar"></i> ${new Date(act.fecha).toLocaleDateString()} 
+                    <i class="fa-regular fa-clock ml-2"></i> ${act.hora}
+                </p>
+                <p class="text-sm font-bold text-green-600 mt-1">$${act.precio}</p>
+            </div>
+        </div>
+    `;
+        }).join('');
+
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+window.eliminarActividad = async (id) => {
+    if (!confirm('¿Eliminar actividad?')) return;
+    await fetch(`/api/actividad/${id}`, { method: 'DELETE' });
+    cargarActividadesAdmin();
+};
