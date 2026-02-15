@@ -14,6 +14,7 @@ const transporter = nodemailer.createTransport({
     refreshToken: process.env.GOOGLE_REFRESH_TOKEN
   }
 });
+
 const registrarUsuario = async (req, res) => {
     try {
 
