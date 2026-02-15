@@ -6,8 +6,8 @@ import nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com", 
-  port: 587,              
-  secure: false,          
+  port: 465,              
+  secure: true,          
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
@@ -15,6 +15,12 @@ const transporter = nodemailer.createTransport({
   tls: {
     rejectUnauthorized: false 
   }
+});
+
+transporter.verify().then(() => {
+    console.log('LISTO PARA ENVIAR CORREOS');
+}).catch((error) => {
+    console.log('ERROR AL CONECTAR CON GMAIL:', error);
 });
 
 const registrarUsuario = async (req, res) => {
