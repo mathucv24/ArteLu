@@ -3,29 +3,17 @@ import Usuario from '../models/usuario.js';
 import jwt from 'jsonwebtoken';
 import Pago from '../models/pago.js';
 import nodemailer from 'nodemailer';
-import { Resend } from 'resend';
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com", 
-  port: 465,              
-  secure: true,          
+  service: 'gmail',
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-  family: 4,
-  connectionTimeout: 10000, 
-  greetingTimeout: 5000
+    type: 'OAuth2',
+    user: 'arteluaerial@gmail.com',
+    clientId: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    refreshToken: process.env.GOOGLE_REFRESH_TOKEN
+  }
 });
-
-console.log("INTENTANDO CONECTAR...");
-console.log("USUARIO:", process.env.EMAIL_USER ? "¡Cargado!" : "ERROR: NO EXISTE");
-console.log("PASS:", process.env.EMAIL_PASS ? "¡Cargado!" : "ERROR: NO EXISTE");
-
-transporter.verify()
-    .then(() => console.log('✅ LISTO PARA ENVIAR CORREOS'))
-    .catch((error) => console.log('❌ ERROR CONEXION:', error));
-
 const registrarUsuario = async (req, res) => {
     try {
 
