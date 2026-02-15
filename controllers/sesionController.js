@@ -185,6 +185,12 @@ const iniciarSesion = async (req, res) => {
         });
     }
 
+    if (usuario.activo === false) {
+        return res.status(403).json({ 
+            mensaje: 'Usuario inactivo. Por favor comunicarse con administración.' 
+        });
+    }
+
     const passwordEncriptado = usuario.password;
 
     const estaValidado = await bycrypt.compare(password, passwordEncriptado);
@@ -287,12 +293,26 @@ const obtenerDetalleUsuarioAdmin = async (req, res) => {
 const cambiarEstadoUsuario = async (req, res) => {
     try {
         const { id } = req.params;
-        const { activo } = req.body;
+        const { activo } = req.body; 
 
-        await Usuario.findByIdAndUpdate(id, { activo });
-        res.json({ msg: "Estado actualizado correctamente" });
+        const usuarioActualizado = await Usuario.findByIdAndUpdate(
+            id, 
+            { activo: activo }, 
+            { new: true } 
+        );
+
+        if (!usuarioActualizado) {
+            return res.status(404).json({ mensaje: "Usuario no encontrado" });
+        }
+
+        res.status(200).json({ 
+            mensaje: "Estado actualizado correctamente", 
+            usuario: usuarioActualizado 
+        });
+
     } catch (error) {
-        res.status(500).json({ msg: "Error al cambiar estado" });
+        console.error(error);
+        res.status(500).json({ mensaje: "Error al cambiar estado" });
     }
 };
 
