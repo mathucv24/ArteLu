@@ -3,27 +3,9 @@ import Usuario from '../models/usuario.js';
 import jwt from 'jsonwebtoken';
 import Pago from '../models/pago.js';
 import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com", 
-  port: 465,              
-  secure: true,          
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-  family: 4,
-  connectionTimeout: 10000, 
-  greetingTimeout: 5000
-});
-
-console.log("INTENTANDO CONECTAR...");
-console.log("USUARIO:", process.env.EMAIL_USER ? "¡Cargado!" : "ERROR: NO EXISTE");
-console.log("PASS:", process.env.EMAIL_PASS ? "¡Cargado!" : "ERROR: NO EXISTE");
-
-transporter.verify()
-    .then(() => console.log('✅ LISTO PARA ENVIAR CORREOS'))
-    .catch((error) => console.log('❌ ERROR CONEXION:', error));
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const registrarUsuario = async (req, res) => {
     try {
@@ -124,11 +106,10 @@ const registrarUsuario = async (req, res) => {
 
         await Usuario.create(nuevoUsuario);
 
-        await transporter.sendMail({
-            from: '"ArteLu Academia de Deportes Aereos" <arteluaerial@gmail.com>',
+        await resend.emails.send({
+            from: '"ArteLu Academia de Deportes Aereos" <onboarding@resend.dev>', 
             to: email,
-            subject: "Código de Verificación - ArteLu",
-            text: `<b>Tu código de verificación es: ${codigo}. Gracias por atreverte a volar!`,
+            subject: 'Verifica tu cuenta',
             html: htmlContent
         });
 
@@ -179,13 +160,13 @@ const iniciarSesion = async (req, res) => {
     const { email, password } = req.body;
 
     if (!email) {
-        return res.status(400).json({ 
+        return res.status(400).json({
             mensaje: 'El correo es obligatorio'
         });
     }
 
     if (!password) {
-        return res.status(400).json({ 
+        return res.status(400).json({
             mensaje: 'La contraseña es obligatoria'
         });
     }
@@ -193,14 +174,14 @@ const iniciarSesion = async (req, res) => {
     const usuario = await Usuario.findOne({ email });
 
     if (!usuario) {
-        return res.status(404).json({ 
+        return res.status(404).json({
             mensaje: 'No existe un usuario con ese correo'
         });
     }
 
     if (usuario.activo === false) {
-        return res.status(403).json({ 
-            mensaje: 'Usuario inactivo. Por favor comunicarse con administración.' 
+        return res.status(403).json({
+            mensaje: 'Usuario inactivo. Por favor comunicarse con administración.'
         });
     }
 
@@ -209,7 +190,7 @@ const iniciarSesion = async (req, res) => {
     const estaValidado = await bycrypt.compare(password, passwordEncriptado);
 
     if (!estaValidado) {
-        return res.status(401).json({ 
+        return res.status(401).json({
             mensaje: 'Las credenciales son incorrectas'
         });
     }
@@ -234,7 +215,7 @@ const iniciarSesion = async (req, res) => {
     res.json({
         mensaje: 'Se ha iniciado sesion correctamente',
         token: userToken,
-        rol: usuario.rol 
+        rol: usuario.rol
     });
 }
 
@@ -306,21 +287,21 @@ const obtenerDetalleUsuarioAdmin = async (req, res) => {
 const cambiarEstadoUsuario = async (req, res) => {
     try {
         const { id } = req.params;
-        const { activo } = req.body; 
+        const { activo } = req.body;
 
         const usuarioActualizado = await Usuario.findByIdAndUpdate(
-            id, 
-            { activo: activo }, 
-            { new: true } 
+            id,
+            { activo: activo },
+            { new: true }
         );
 
         if (!usuarioActualizado) {
             return res.status(404).json({ mensaje: "Usuario no encontrado" });
         }
 
-        res.status(200).json({ 
-            mensaje: "Estado actualizado correctamente", 
-            usuario: usuarioActualizado 
+        res.status(200).json({
+            mensaje: "Estado actualizado correctamente",
+            usuario: usuarioActualizado
         });
 
     } catch (error) {
@@ -343,8 +324,8 @@ const solicitarRecuperacion = async (req, res) => {
         usuario.codigoRecuperacion = codigo;
         await usuario.save();
 
-        await transporter.sendMail({
-            from: '"ArteLu Academia de Deportes Aereos" <arteluaerial@gmail.com>',
+        await resend.emails.send({
+            from: '"ArteLu Academia de Deportes Aereos" <onboarding@resend.dev>',
             to: email,
             subject: "Recuperación de Contraseña - ArteLu",
             html: `
@@ -382,7 +363,7 @@ const restablecerPassword = async (req, res) => {
         const passwordEncriptado = await bycrypt.hash(newPassword, 10);
 
         usuario.password = passwordEncriptado;
-        usuario.codigoRecuperacion = null; 
+        usuario.codigoRecuperacion = null;
         await usuario.save();
 
         res.json({ mensaje: 'Contraseña restablecida exitosamente.' });
