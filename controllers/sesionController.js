@@ -5,11 +5,16 @@ import Pago from '../models/pago.js';
 import nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'arteluaerial@gmail.com',
-        pass: 'yszg fzbq pztc scix'
-    }
+  host: "smtp.gmail.com", 
+  port: 587,              
+  secure: false,          
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+  tls: {
+    rejectUnauthorized: false 
+  }
 });
 
 const registrarUsuario = async (req, res) => {
