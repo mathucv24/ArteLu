@@ -12,16 +12,18 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
-  tls: {
-    rejectUnauthorized: false 
-  }
+  family: 4,
+  connectionTimeout: 10000, 
+  greetingTimeout: 5000
 });
 
-transporter.verify().then(() => {
-    console.log('LISTO PARA ENVIAR CORREOS');
-}).catch((error) => {
-    console.log('ERROR AL CONECTAR CON GMAIL:', error);
-});
+console.log("INTENTANDO CONECTAR...");
+console.log("USUARIO:", process.env.EMAIL_USER ? "¡Cargado!" : "ERROR: NO EXISTE");
+console.log("PASS:", process.env.EMAIL_PASS ? "¡Cargado!" : "ERROR: NO EXISTE");
+
+transporter.verify()
+    .then(() => console.log('✅ LISTO PARA ENVIAR CORREOS'))
+    .catch((error) => console.log('❌ ERROR CONEXION:', error));
 
 const registrarUsuario = async (req, res) => {
     try {
