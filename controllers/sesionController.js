@@ -7,8 +7,8 @@ import nodemailer from 'nodemailer';
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 587,              
-  secure: false,
-  requireTLS: true,
+  secure: false,          
+  requireTLS: true,       
   auth: {
     type: 'OAuth2',
     user: 'arteluaerial@gmail.com',
@@ -17,7 +17,7 @@ const transporter = nodemailer.createTransport({
     refreshToken: process.env.GOOGLE_REFRESH_TOKEN
   },
   tls: {
-    rejectUnauthorized: false
+    rejectUnauthorized: false 
   },
   family: 4 
 });
@@ -120,10 +120,10 @@ const registrarUsuario = async (req, res) => {
         </div>`;
 
         await Usuario.create(nuevoUsuario);
-        console.log("INTENTANDO ENVIAR CORREO CON PUERTO 587...");
+       
 
         await transporter.sendMail({
-            from: '"ArteLu Academia de Deportes Aereos" <arteluaerial@gmail.com>',
+            from: '"ArteLu Academia de Deportes Aereos" <arteluaerial@outlook.com>',
             to: email,
             subject: "Código de Verificación - ArteLu",
             text: `<b>Tu código de verificación es: ${codigo}. Gracias por atreverte a volar!`,
