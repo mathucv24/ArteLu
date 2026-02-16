@@ -31,6 +31,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     }
 
+    const setupTogglePassword = (btnId, inputId) => {
+        const btn = document.getElementById(btnId);
+        const input = document.getElementById(inputId);
+
+        if (btn && input) {
+            btn.addEventListener('click', () => {
+                const icon = btn.querySelector('i');
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    input.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            });
+        }
+    };
+
+    setupTogglePassword('toggle-password', 'password');
+    setupTogglePassword('toggle-repassword', 'repassword');
+
     const registrarUsuarioForm = document.getElementById('registrar-usuario-form');
     const inputNombre = document.getElementById('nombre');
     const inputTelefono = document.getElementById('telefono');

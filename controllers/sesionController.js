@@ -6,8 +6,9 @@ import nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
-  port: 465,            
-  secure: true,         
+  port: 587,              
+  secure: false,
+  requireTLS: true,
   auth: {
     type: 'OAuth2',
     user: 'arteluaerial@gmail.com',
@@ -15,9 +16,10 @@ const transporter = nodemailer.createTransport({
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     refreshToken: process.env.GOOGLE_REFRESH_TOKEN
   },
-  family: 4,            
-  connectionTimeout: 10000, 
-  greetingTimeout: 5000     
+  tls: {
+    rejectUnauthorized: false
+  },
+  family: 4 
 });
 
 const registrarUsuario = async (req, res) => {
@@ -118,6 +120,7 @@ const registrarUsuario = async (req, res) => {
         </div>`;
 
         await Usuario.create(nuevoUsuario);
+        console.log("INTENTANDO ENVIAR CORREO CON PUERTO 587...");
 
         await transporter.sendMail({
             from: '"ArteLu Academia de Deportes Aereos" <arteluaerial@gmail.com>',

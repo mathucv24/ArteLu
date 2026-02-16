@@ -39,7 +39,7 @@
         <%- include ('./partials/alert.ejs') %>
             <div class="container mx-auto px-4 py-8 min-h-screen">
 
-                <div class="mb-8 text-center">
+                <div class="mb-4 mt-14 text-center">
                     <h1 class="text-3xl font-bold text-primary mb-2">Panel de Administración</h1>
                     <p class="text-gray-600">Gestiona disciplinas, usuarios y pagos desde un solo lugar.</p>
                 </div>
@@ -352,65 +352,60 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">
-                                    Nombre
-                                </label>
+                                <label class="block text-sm font-medium text-gray-700">Nombre</label>
                                 <input type="text" id="edit-nombre"
                                     class="w-full border p-2 rounded focus:ring-secondary focus:border-secondary">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">
-                                    Precio Mensual ($)
-                                </label>
+                                <label class="block text-sm font-medium text-gray-700">Precio Mensual ($)</label>
                                 <input type="number" id="edit-precio" step="0.01"
                                     class="w-full border p-2 rounded focus:ring-secondary">
                             </div>
                         </div>
 
                         <div class="mb-4">
-                            <label class="block text-sm font-medium text-gray-700">
-                                Descripción
-                            </label>
+                            <label class="block text-sm font-medium text-gray-700">Descripción</label>
                             <textarea id="edit-descripcion" rows="2" class="w-full border p-2 rounded"></textarea>
                         </div>
 
+                        <div class="mb-4 border-t pt-4 border-b pb-4">
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Gestión de Imágenes (Máx
+                                3)</label>
+
+                            <div id="contenedor-imagenes-editar" class="flex gap-4 mb-3 overflow-x-auto">
+                            </div>
+
+                            <label class="block text-xs text-gray-500 mb-1">Subir nuevas imágenes:</label>
+                            <input type="file" id="edit-fotos" multiple accept="image/*"
+                                class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
+                        </div>
                         <div class="mb-4">
                             <label class="inline-flex items-center cursor-pointer">
                                 <input type="checkbox" id="edit-activa" class="sr-only peer">
                                 <div
                                     class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary">
                                 </div>
-                                <span class="ms-3 text-sm font-medium text-gray-700">
-                                    Disciplina Activa
-                                </span>
+                                <span class="ms-3 text-sm font-medium text-gray-700">Disciplina Activa</span>
                             </label>
                         </div>
 
                         <div class="border-t pt-4 mt-4">
                             <div class="flex justify-between items-center mb-3">
-                                <h4 class="font-bold text-gray-700">
-                                    Horarios
-                                </h4>
+                                <h4 class="font-bold text-gray-700">Horarios</h4>
                                 <button type="button" onclick="agregarFilaHorario('contenedor-horarios-editar')"
                                     class="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded hover:bg-blue-200">
-                                    <i class="fa-solid fa-plus"></i>
-                                    Nuevo Horario
+                                    <i class="fa-solid fa-plus"></i> Nuevo Horario
                                 </button>
                             </div>
-
-                            <div id="contenedor-horarios-editar" class="space-y-2">
-                            </div>
+                            <div id="contenedor-horarios-editar" class="space-y-2"></div>
                         </div>
 
                         <div class="flex justify-end gap-3 mt-6 pt-4 border-t">
                             <button type="button" onclick="cerrarModal()"
-                                class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">
-                                Cancelar
-                            </button>
+                                class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">Cancelar</button>
                             <button type="submit"
-                                class="px-6 py-2 bg-secondary text-white rounded hover:bg-blue-900 font-semibold">
-                                Guardar Cambios
-                            </button>
+                                class="px-6 py-2 bg-secondary text-white rounded hover:bg-blue-900 font-semibold">Guardar
+                                Cambios</button>
                         </div>
                     </form>
                 </div>

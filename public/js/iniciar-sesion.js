@@ -2,6 +2,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const iniciarSesionForm = document.getElementById('iniciar-sesion-form');
     const btnSubmit = document.getElementById('btn-submit');
+    const togglePasswordBtn = document.getElementById('toggle-password');
+    const passwordInput = document.getElementById('password');
+
+    if (togglePasswordBtn && passwordInput) {
+        togglePasswordBtn.addEventListener('click', () => {
+            const icon = togglePasswordBtn.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash'); 
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye'); 
+            }
+        });
+    }
 
     iniciarSesionForm.addEventListener('submit', async (e) => {
         e.preventDefault();

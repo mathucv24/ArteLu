@@ -73,40 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    const formEditar = document.getElementById('form-editar-disciplina');
-    if (formEditar) {
-        formEditar.addEventListener('submit', async (e) => {
-            e.preventDefault();
 
-            const id = document.getElementById('edit-id').value;
-            const nombre = document.getElementById('edit-nombre').value;
-            const precioMensual = document.getElementById('edit-precio').value;
-            const descripcion = document.getElementById('edit-descripcion').value;
-            const activa = document.getElementById('edit-activa').checked;
-
-            const horarios = obtenerHorariosDelFormulario('contenedor-horarios-editar');
-
-            try {
-                const res = await fetch('/api/actualizar-disciplina', {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id, nombre, precioMensual, descripcion, activa, horarios })
-                });
-
-                if (res.ok) {
-                    mostrarAlerta(false, "Actualizado con éxito");
-                    window.cerrarModal();
-                    cargarDisciplinas();
-                } else {
-                    const data = await res.json();
-                    mostrarAlerta(true, "Error: " + data.mensaje);
-                }
-            } catch (error) {
-                console.error(error);
-                mostrarAlerta(true, "Error de conexión");
-            }
-        });
-    }
 
     cargarDisciplinas();
 
@@ -277,6 +244,53 @@ window.eliminarDis = async (id) => {
     }
 };
 
+window.eliminarImagen = async (idImagen) => {
+    const idDisciplina = document.getElementById('edit-id').value;
+    if (!confirm("¿Eliminar esta imagen?")) return;
+
+    try {
+        const res = await fetch(`/api/${idDisciplina}/imagen/${idImagen}`, { method: 'DELETE' });
+        const data = await res.json();
+
+        if (res.ok) {
+            mostrarImagenesEnModal(data.imagenes);
+            const disc = listaDisciplinas.find(d => d._id === idDisciplina);
+            if (disc) disc.imagenes = data.imagenes;
+        } else {
+            mostrarAlerta(true, "Error al eliminar imagen");
+        }
+    } catch (error) {
+        mostrarAlerta(true, "Error de conexión");
+    }
+};
+
+function mostrarImagenesEnModal(imagenes) {
+    const contenedor = document.getElementById('contenedor-imagenes-editar');
+    contenedor.innerHTML = '';
+
+    if (!imagenes || imagenes.length === 0) {
+        contenedor.innerHTML = '<span class="text-xs text-gray-400 italic">Sin imágenes</span>';
+        return;
+    }
+
+    imagenes.forEach((img, index) => {
+        const esPrincipal = index === 0; 
+        const borde = esPrincipal ? 'border-4 border-green-500' : 'border border-gray-300';
+        const etiqueta = esPrincipal ? '<span class="absolute top-0 left-0 bg-green-500 text-white text-[10px] px-1 font-bold">PRINCIPAL</span>' : '';
+
+        contenedor.innerHTML += `
+            <div class="relative w-20 h-20 group shrink-0">
+                <img src="${img.url}" class="w-full h-full object-cover rounded-md ${borde}">
+                ${etiqueta}
+                <button type="button" onclick="eliminarImagen('${img._id}')" 
+                    class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-700 shadow-sm">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+        `;
+    });
+}
+
 window.abrirModalEditar = (id) => {
     const disciplina = listaDisciplinas.find(d => d._id === id);
     if (!disciplina) return;
@@ -287,13 +301,14 @@ window.abrirModalEditar = (id) => {
     document.getElementById('edit-descripcion').value = disciplina.descripcion || '';
     document.getElementById('edit-activa').checked = disciplina.activa;
 
+    document.getElementById('edit-fotos').value = "";
+
+    mostrarImagenesEnModal(disciplina.imagenes);
+
     const contenedorHorarios = document.getElementById('contenedor-horarios-editar');
     contenedorHorarios.innerHTML = '';
-
     if (disciplina.horarios && disciplina.horarios.length > 0) {
-        disciplina.horarios.forEach(h => {
-            agregarFilaHorario('contenedor-horarios-editar', h);
-        });
+        disciplina.horarios.forEach(h => agregarFilaHorario('contenedor-horarios-editar', h));
     } else {
         agregarFilaHorario('contenedor-horarios-editar');
     }
@@ -301,6 +316,51 @@ window.abrirModalEditar = (id) => {
     const modal = document.getElementById('modal-editar');
     if (modal) modal.classList.remove('hidden');
 };
+
+const formEditar = document.getElementById('form-editar-disciplina');
+if (formEditar) {
+    formEditar.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData();
+
+        formData.append('id', document.getElementById('edit-id').value);
+        formData.append('nombre', document.getElementById('edit-nombre').value);
+        formData.append('precioMensual', document.getElementById('edit-precio').value);
+        formData.append('descripcion', document.getElementById('edit-descripcion').value);
+        formData.append('activa', document.getElementById('edit-activa').checked);
+
+        const horarios = obtenerHorariosDelFormulario('contenedor-horarios-editar');
+        formData.append('horarios', JSON.stringify(horarios));
+
+        const inputFotos = document.getElementById('edit-fotos');
+        if (inputFotos.files.length > 0) {
+            for (let i = 0; i < inputFotos.files.length; i++) {
+                formData.append('fotos', inputFotos.files[i]);
+            }
+        }
+
+        try {
+            const res = await fetch('/api/actualizar-disciplina', {
+                method: 'PUT',
+                body: formData
+            });
+
+            if (res.ok) {
+                mostrarAlerta(false, "Disciplina actualizada con éxito");
+                window.cerrarModal();
+                cargarDisciplinas();
+            } else {
+                const data = await res.json();
+                mostrarAlerta(true, "Error: " + data.mensaje);
+            }
+        } catch (error) {
+            console.error(error);
+            mostrarAlerta(true, "Error de conexión");
+        }
+    });
+}
+
 
 window.cerrarModal = () => {
     const modal = document.getElementById('modal-editar');
@@ -805,7 +865,7 @@ async function cargarActividadesAdmin() {
 
         contenedor.innerHTML = actividades.map(act => {
 
-            let colorBadge = "bg-accent/20 text-secondary"; 
+            let colorBadge = "bg-accent/20 text-secondary";
             if (act.tipo === 'Promoción') colorBadge = "bg-yellow-100 text-yellow-700";
             if (act.tipo === 'Competencia') colorBadge = "bg-red-100 text-red-700";
 
