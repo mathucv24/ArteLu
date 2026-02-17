@@ -5,8 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ArteLu | Panel de Alumno</title>
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#52054d">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -183,7 +182,7 @@
                                         class="col-span-1 md:col-span-2 p-3 bg-gray-50 rounded border border-gray-200 mt-2 flex items-center gap-3">
                                         <input type="checkbox" id="check-representante"
                                             class="w-5 h-5 text-highlight rounded focus:ring-highlight"
-                                            <%=datosUsuario.rol_user ? 'checked' : '' %>>
+                                            <%=datosUsuario.rol_user ? 'checked' : '' %> >
                                         <label for="check-representante"
                                             class="text-sm font-semibold text-gray-700 cursor-pointer select-none">
                                             Soy Representante (Gestiono la cuenta de un alumno)
@@ -342,7 +341,6 @@
                                     meses.forEach((mes, index)=> {
                                     let estado = 'sin_pago';
 
-                                    // Uso de listaPagos (la variable segura) en lugar de pagos
                                     const pagosDelMes = listaPagos.filter(p => {
                                     let mesPago, anioPago;
                                     if (p.mesCorrespondiente !== undefined && p.mesCorrespondiente !== null) {
@@ -359,43 +357,35 @@
                                     if (pagosDelMes.some(p => p.estado === 'aprobado')) estado = 'aprobado';
                                     else if (pagosDelMes.some(p => p.estado === 'pendiente')) estado = 'pendiente';
                                     else if (pagosDelMes.some(p => p.estado === 'rechazado')) estado = 'rechazado';
-
-                                    let colorClass = "bg-gray-50 border-gray-200 text-gray-400 opacity-70
-                                    border-dashed";
-                                    let iconClass = "fa-circle";
-                                    let textStatus = "Sin pago";
-
-                                    if(estado === 'aprobado') {
-                                    colorClass = "bg-green-50 border-green-400 text-green-700 shadow-sm ring-1
-                                    ring-green-200";
-                                    iconClass = "fa-check-circle";
-                                    textStatus = "Pagado";
-                                    } else if(estado === 'pendiente') {
-                                    colorClass = "bg-yellow-50 border-yellow-400 text-yellow-700 shadow-sm ring-1
-                                    ring-yellow-200";
-                                    iconClass = "fa-clock";
-                                    textStatus = "Pendiente";
-                                    } else if(estado === 'rechazado') {
-                                    colorClass = "bg-red-50 border-red-400 text-red-700 shadow-sm ring-1 ring-red-200";
-                                    iconClass = "fa-circle-xmark";
-                                    textStatus = "Rechazado";
-                                    }
                                     %>
-                                    <div
-                                        class="flex flex-col items-center justify-center p-4 rounded-xl border <%= colorClass %> transition-all duration-300 hover:shadow-md h-24">
-                                        <span class="text-sm font-bold uppercase tracking-wider mb-1">
-                                            <%= mes %>
-                                        </span>
-                                        <% if(estado !=='sin_pago' ) { %>
-                                            <i class="fa-solid <%= iconClass %> text-2xl mb-1"></i>
-                                            <span class="text-[10px] font-semibold uppercase">
-                                                <%= textStatus %>
+                                    <% let
+                                        colorClass="bg-gray-50 border-gray-200 text-gray-400 opacity-70 border-dashed" ;
+                                        let iconClass="fa-circle" ; let textStatus="Sin pago" ; if(estado==='aprobado' )
+                                        {
+                                        colorClass="bg-green-50 border-green-400 text-green-700 shadow-sm ring-1 ring-green-200"
+                                        ; iconClass="fa-check-circle" ; textStatus="Pagado" ; } else
+                                        if(estado==='pendiente' ) {
+                                        colorClass="bg-yellow-50 border-yellow-400 text-yellow-700 shadow-sm ring-1 ring-yellow-200"
+                                        ; iconClass="fa-clock" ; textStatus="Pendiente" ; } else if(estado==='rechazado'
+                                        ) {
+                                        colorClass="bg-red-50 border-red-400 text-red-700 shadow-sm ring-1 ring-red-200"
+                                        ; iconClass="fa-circle-xmark" ; textStatus="Rechazado" ; } %>
+                                        %>
+                                        <div
+                                            class="flex flex-col items-center justify-center p-4 rounded-xl border <%= colorClass %> transition-all duration-300 hover:shadow-md h-24">
+                                            <span class="text-sm font-bold uppercase tracking-wider mb-1">
+                                                <%= mes %>
                                             </span>
-                                            <% } else { %>
-                                                <span class="text-3xl font-bold text-gray-300/50">-</span>
-                                                <% } %>
-                                    </div>
-                                    <% }); %>
+                                            <% if(estado !=='sin_pago' ) { %>
+                                                <i class="fa-solid <%= iconClass %> text-2xl mb-1"></i>
+                                                <span class="text-[10px] font-semibold uppercase">
+                                                    <%= textStatus %>
+                                                </span>
+                                                <% } else { %>
+                                                    <span class="text-3xl font-bold text-gray-300/50">-</span>
+                                                    <% } %>
+                                        </div>
+                                        <% }); %>
                             </div>
                         </div>
 
