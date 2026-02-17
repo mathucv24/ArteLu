@@ -1,0 +1,20 @@
+{
+  "name": "ArteLu Academia de Deportes Aéreos",
+  "short_name": "ArteLu",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#efefdc",
+  "theme_color": "#52054d",
+  "icons": [
+    {
+      "src": "/assets/logo.png", 
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

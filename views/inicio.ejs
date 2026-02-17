@@ -5,6 +5,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ArteLu | Academia de Deportes Aéreos</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#52054d">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -163,7 +165,7 @@
             </section>
 
             <script>
-                window.datosClases = <%- JSON.stringify(disciplinas || []) %>
+                window.datosClases = <% - JSON.stringify(disciplinas || []) %>
             </script>
 
             <section id="clases" class="bg-neutralgray dark:bg-gray-800 py-28 px-6">
@@ -280,9 +282,9 @@
                 </div>
             </button>
             <%- include('./partials/modales-actividades.ejs') %>
-            <%- include('./partials/modal-clase.ejs') %>
-            <%- include('./partials/aside.ejs') %>
-            <%- include('./partials/footer.ejs') %>
+                <%- include('./partials/modal-clase.ejs') %>
+                    <%- include('./partials/aside.ejs') %>
+                        <%- include('./partials/footer.ejs') %>
 
         </main>
 
