@@ -79,12 +79,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    const handleLogout = (e) => {
+    const handleLogout = async (e) => { 
         e.preventDefault();
-       
-        localStorage.removeItem('userToken');
-        window.location.href = '/'; 
-        
+
+        try {
+            const response = await fetch('/api/sesion/cerrar-sesion', { 
+                method: 'POST', 
+                credentials: 'include' 
+            });
+
+            if (response.ok) {
+                localStorage.removeItem('userToken');
+                localStorage.removeItem('theme'); 
+
+                window.location.href = '/'; 
+            } else {
+                console.error("Error al cerrar sesión en el servidor");
+                alert("Hubo un problema al cerrar la sesión. Intenta nuevamente.");
+            }
+        } catch (error) {
+            console.error("Error de red al intentar cerrar sesión:", error);
+            alert("Error de conexión. No se pudo cerrar la sesión.");
+        }
     };
 
     if(btnLogoutDesktop) btnLogoutDesktop.addEventListener('click', handleLogout);

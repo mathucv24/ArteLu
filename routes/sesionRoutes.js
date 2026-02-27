@@ -8,7 +8,8 @@ import {
     obtenerDetalleUsuarioAdmin,
     cambiarEstadoUsuario,
     solicitarRecuperacion,
-    restablecerPassword
+    restablecerPassword,
+    cerrarSesion
 
 } from '../controllers/sesionController.js';
 
@@ -25,4 +26,5 @@ sesionRoutes.put('/cambiar-estado/:id', cambiarEstadoUsuario);
 sesionRoutes.post('/verificar-usuario', verificarUsuario);
 sesionRoutes.post('/solicitar-recuperacion', solicitarRecuperacion);
 sesionRoutes.put('/restablecer-password', restablecerPassword);
+sesionRoutes.post('/cerrar-sesion', cerrarSesion);
 export default sesionRoutes;

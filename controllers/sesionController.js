@@ -5,21 +5,11 @@ import Pago from '../models/pago.js';
 import nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,              
-  secure: false,          
-  requireTLS: true,       
-  auth: {
-    type: 'OAuth2',
-    user: 'arteluaerial@gmail.com',
-    clientId: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    refreshToken: process.env.GOOGLE_REFRESH_TOKEN
-  },
-  tls: {
-    rejectUnauthorized: false 
-  },
-  family: 4 
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS 
+    }
 });
 
 const registrarUsuario = async (req, res) => {
@@ -123,7 +113,7 @@ const registrarUsuario = async (req, res) => {
        
 
         await transporter.sendMail({
-            from: '"ArteLu Academia de Deportes Aereos" <arteluaerial@outlook.com>',
+            from: '"ArteLu Academia de Deportes Aereos" <arteluaerial@gmail.com>',
             to: email,
             subject: "Código de Verificación - ArteLu",
             text: `<b>Tu código de verificación es: ${codigo}. Gracias por atreverte a volar!`,
@@ -391,6 +381,20 @@ const restablecerPassword = async (req, res) => {
     }
 };
 
+const cerrarSesion = async (req, res) => {
+    try {
+        res.clearCookie('userToken', {
+            httpOnly: true,
+            
+        });
+        
+        res.status(200).json({ mensaje: 'Sesión cerrada y cookie eliminada correctamente' });
+    } catch (error) {
+        console.error("Error al cerrar sesión:", error);
+        res.status(500).json({ mensaje: 'Error interno al cerrar sesión' });
+    }
+};
+
 export {
     registrarUsuario,
     verificarUsuario,
@@ -400,5 +404,6 @@ export {
     obtenerDetalleUsuarioAdmin,
     cambiarEstadoUsuario,
     solicitarRecuperacion,
-    restablecerPassword
+    restablecerPassword,
+    cerrarSesion
 };
