@@ -1,10 +1,18 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
 import jwt from 'jsonwebtoken';
 import Pago from '../models/pago.js';
 import Usuario from '../models/usuario.js'; 
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const s3 = new S3Client({
+    region: 'auto',
+    endpoint: process.env.R2_ENDPOINT,
+    credentials: {
+        accessKeyId: process.env.R2_ACCESS_KEY_ID,
+        secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
+    },
+});
+
+const URL_PUBLICA_R2 = "https://pub-91cda52a619f47388d183c1312680b2e.r2.dev";
 
 const registrarPago = async (req, res) => {
     try {
@@ -18,28 +26,33 @@ const registrarPago = async (req, res) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const usuarioId = decoded.id;
         const usuarioData = await Usuario.findById(usuarioId);
+        
         const archivo = req.files.comprobante;
-        const nombreArchivo = `${Date.now()}_${archivo.name.replace(/\s/g, '_')}`;
-        const uploadPath = path.join(__dirname, '../public/uploads/', nombreArchivo);
-        const publicUrl = `/uploads/${nombreArchivo}`;
+        
+        const nombreArchivo = `comprobantes/${Date.now()}_${archivo.name.replace(/\s/g, '_')}`;
+        
+        await s3.send(new PutObjectCommand({
+            Bucket: 'artelu-images',
+            Key: nombreArchivo,
+            Body: archivo.data,
+            ContentType: archivo.mimetype,
+        }));
 
-        archivo.mv(uploadPath, async (err) => {
-            if (err) return res.status(500).send(err);
+        const publicUrl = `${URL_PUBLICA_R2}/${nombreArchivo}`;
 
-            const { disciplina, frecuencia, monto, referencia } = req.body;
+        const { disciplina, frecuencia, monto, referencia } = req.body;
 
-            await Pago.create({
-                usuario: usuarioId, 
-                usuario_nombre: usuarioData.nombre, 
-                disciplina,
-                frecuencia,
-                monto,
-                referencia,
-                comprobante_url: publicUrl
-            });
-
-            res.redirect('/dashboard');
+        await Pago.create({
+            usuario: usuarioId, 
+            usuario_nombre: usuarioData.nombre, 
+            disciplina,
+            frecuencia,
+            monto,
+            referencia,
+            comprobante_url: publicUrl
         });
+
+        res.redirect('/dashboard');
 
     } catch (error) {
         console.error("Error al registrar pago:", error);

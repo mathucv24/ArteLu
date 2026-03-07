@@ -1,7 +1,16 @@
 import Actividades from '../models/actividades.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import fs from 'fs';
+import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
+
+const s3 = new S3Client({
+    region: 'auto',
+    endpoint: process.env.R2_ENDPOINT,
+    credentials: {
+        accessKeyId: process.env.R2_ACCESS_KEY_ID,
+        secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
+    },
+});
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -22,15 +31,20 @@ const crearActividad = async (req, res) => {
                 return res.status(400).json({ mensaje: 'Formato de imagen no válido' });
             }
 
-            const nombreArchivo = `${Date.now()}-${Math.round(Math.random() * 1E9)}${extension}`;
+            const nombreArchivo = `actividades/${Date.now()}-${Math.round(Math.random() * 1E9)}${extension}`;
             
-            const uploadPath = path.join(__dirname, '../public/uploads/actividades', nombreArchivo);
-            
-            await file.mv(uploadPath);
+            await s3.send(new PutObjectCommand({
+                Bucket: 'artelu-images', 
+                Key: nombreArchivo,
+                Body: file.data,
+                ContentType: file.mimetype,
+            }));
+
+            const urlPublicaR2 = "https://pub-91cda52a619f47388d183c1312680b2e.r2.dev"; 
             
             imagenData = { 
                 public_id: null,
-                url: `/uploads/actividades/${nombreArchivo}` 
+                url: `${urlPublicaR2}/${nombreArchivo}` 
             };
         }
 
@@ -76,19 +90,27 @@ const eliminarActividad = async (req, res) => {
         }
 
         if (actividad.imagen && actividad.imagen.url) {
-            const nombreArchivo = actividad.imagen.url.split('/').pop();
-            const rutaArchivo = path.join(__dirname, '../public/uploads/actividades', nombreArchivo);
+            const urlParts = actividad.imagen.url.split('/');
+            const nombreArchivo = urlParts[urlParts.length - 1];
+            
+            const key = `actividades/${nombreArchivo}`;
 
-            if (fs.existsSync(rutaArchivo)) {
-                fs.unlinkSync(rutaArchivo);
+            try {
+                await s3.send(new DeleteObjectCommand({
+                    Bucket: 'artelu-images', 
+                    Key: key
+                }));
+                console.log("Imagen eliminada de R2 exitosamente");
+            } catch (errorCloudflare) {
+                console.error("Error al eliminar la imagen de R2:", errorCloudflare);
             }
         }
 
         await Actividades.findByIdAndDelete(id);
-        res.json({ mensaje: 'Actividad eliminada correctamente' });
+        res.json({ mensaje: 'Actividad y su imagen eliminadas correctamente' });
 
     } catch (error) {
-        console.error(error);
+        console.error("Error general al eliminar:", error);
         res.status(500).json({ mensaje: 'Error al eliminar la actividad' });
     }
 };

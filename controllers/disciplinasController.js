@@ -1,6 +1,16 @@
 import Disciplina from '../models/disciplinas.js';
-import path from 'path';
+import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
 
+const s3 = new S3Client({
+    region: 'auto',
+    endpoint: process.env.R2_ENDPOINT,
+    credentials: {
+        accessKeyId: process.env.R2_ACCESS_KEY_ID,
+        secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
+    },
+});
+
+const URL_PUBLICA_R2 = "https://pub-91cda52a619f47388d183c1312680b2e.r2.dev";
 
 const obtenerDisciplina = async (req, res) => {
     try {
@@ -46,13 +56,17 @@ const crearDisciplina = async (req, res) => {
 
             for (let i = 0; i < fotos.length; i++) {
                 const foto = fotos[i];
-                const nombreArchivo = `${Date.now()}-${i}-${foto.name.replace(/\s+/g, '-')}`;
-                const rutaGuardado = path.join(process.cwd(), 'public/uploads', nombreArchivo);
-
-                await foto.mv(rutaGuardado);
+                const nombreArchivo = `disciplinas/${Date.now()}-${i}-${foto.name.replace(/\s+/g, '-')}`;
+                
+                await s3.send(new PutObjectCommand({
+                    Bucket: 'artelu-images', 
+                    Key: nombreArchivo,
+                    Body: foto.data,
+                    ContentType: foto.mimetype,
+                }));
 
                 imagenesGuardadas.push({
-                    url: `/uploads/${nombreArchivo}`,
+                    url: `${URL_PUBLICA_R2}/${nombreArchivo}`, 
                     esPrincipal: i === 0
                 });
             }
@@ -112,13 +126,17 @@ const actualizarDisciplina = async (req, res) => {
 
             for (let i = 0; i < nuevasFotos.length; i++) {
                 const foto = nuevasFotos[i];
-                const nombreArchivo = `${Date.now()}-${i}-${foto.name.replace(/\s+/g, '-')}`;
-                const rutaGuardado = path.join(process.cwd(), 'public/uploads', nombreArchivo);
+                const nombreArchivo = `disciplinas/${Date.now()}-${i}-${foto.name.replace(/\s+/g, '-')}`;
 
-                await foto.mv(rutaGuardado);
+                await s3.send(new PutObjectCommand({
+                    Bucket: 'artelu-images',
+                    Key: nombreArchivo,
+                    Body: foto.data,
+                    ContentType: foto.mimetype,
+                }));
 
                 disciplina.imagenes.push({
-                    url: `/uploads/${nombreArchivo}`,
+                    url: `${URL_PUBLICA_R2}/${nombreArchivo}`,
                     esPrincipal: false 
                 });
             }
@@ -152,12 +170,20 @@ const eliminarImagenDisciplina = async (req, res) => {
 
         const imagen = disciplina.imagenes.id(idImagen);
         if (imagen) {
-            const rutaArchivo = path.join(process.cwd(), 'public', imagen.url);
-            if (fs.existsSync(rutaArchivo)) {
-                fs.unlinkSync(rutaArchivo);
+            const urlParts = imagen.url.split('/');
+            const nombreArchivo = urlParts[urlParts.length - 1];
+            const key = `disciplinas/${nombreArchivo}`; 
+
+            try {
+                await s3.send(new DeleteObjectCommand({
+                    Bucket: 'artelu-images',
+                    Key: key
+                }));
+            } catch (errorCloudflare) {
+                console.error("Error al eliminar imagen de R2:", errorCloudflare);
             }
             
-            disciplina.imagenes.pull(idImagen);
+            disciplina.imagenes.pull(idImagen); 
         }
 
         if (disciplina.imagenes.length > 0) {
@@ -182,17 +208,35 @@ const eliminarDisciplina = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const disciplinaEliminada = await Disciplina.findByIdAndDelete(id);
+        const disciplina = await Disciplina.findById(id);
 
-        if (!disciplinaEliminada) {
+        if (!disciplina) {
             return res.status(404).json({
                 mensaje: 'No existe la disciplina con el id proporcionado'
             });
         }
 
+        if (disciplina.imagenes && disciplina.imagenes.length > 0) {
+            for (const img of disciplina.imagenes) {
+                const urlParts = img.url.split('/');
+                const nombreArchivo = urlParts[urlParts.length - 1];
+                const key = `disciplinas/${nombreArchivo}`;
+
+                try {
+                    await s3.send(new DeleteObjectCommand({
+                        Bucket: 'artelu-images',
+                        Key: key
+                    }));
+                } catch (errorCloudflare) {
+                    console.error("Error al limpiar imagen huérfana en R2:", errorCloudflare);
+                }
+            }
+        }
+
+        await Disciplina.findByIdAndDelete(id);
+
         return res.status(200).json({
-            mensaje: 'Disciplina eliminada correctamente de la base de datos',
-            disciplina: disciplinaEliminada
+            mensaje: 'Disciplina y sus imágenes eliminadas correctamente de la base de datos',
         });
 
     } catch (error) {
