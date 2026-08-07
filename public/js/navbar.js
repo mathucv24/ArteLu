@@ -18,67 +18,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const userToken = localStorage.getItem('userToken');
 
-    const desktopGuest = document.querySelector('.desktop-guest');
-    const desktopAuth = document.querySelector('.desktop-auth');
-    const btnLogoutDesktop = document.getElementById('btn-logout-desktop');
-
-    const mobileGuest = document.getElementById('mobile-guest');
-    const mobileAuth = document.getElementById('mobile-auth');
-    const btnLogoutMobile = document.getElementById('btn-logout-mobile');
+    // Seleccionamos las clases para Escritorio
+    const desktopGuest = document.querySelectorAll('.desktop-guest');
+    const desktopAuth = document.querySelectorAll('.desktop-auth');
     
-    const btnMenuMovil = document.getElementById('btn-menu-movil');
-    const iconMenu = document.getElementById('icon-menu');
-    const menuMovil = document.getElementById('menu-movil');
-    const mobileLinks = document.querySelectorAll('.mobile-link'); 
+    // Seleccionamos las clases para los botones pequeños en Móvil
+    const mobileGuest = document.querySelectorAll('.mobile-guest');
+    const mobileAuth = document.querySelectorAll('.mobile-auth');
+    
+    // Botones de cierre de sesión
+    const btnLogoutDesktop = document.getElementById('btn-logout-desktop');
+    const btnLogoutMobile = document.getElementById('btn-logout-mobile');
 
+    // Lógica de visualización
     if (userToken) {
-        if(desktopGuest) desktopGuest.classList.add('hidden');
-        if(desktopAuth) desktopAuth.classList.remove('hidden');
-
-        if(mobileGuest) mobileGuest.classList.add('hidden');
-        if(mobileAuth) mobileAuth.classList.remove('hidden');   
+        // Ocultar Invitados
+        desktopGuest.forEach(el => { el.classList.remove('flex'); el.classList.add('hidden'); });
+        mobileGuest.forEach(el => { el.classList.remove('inline-flex'); el.classList.add('hidden'); });
+        
+        // Mostrar Logueados
+        desktopAuth.forEach(el => { el.classList.remove('hidden'); el.classList.add('flex'); });
+        mobileAuth.forEach(el => { el.classList.remove('hidden'); el.classList.add('inline-flex'); });
     } else {
-        if(desktopGuest) desktopGuest.classList.remove('hidden');
-        if(desktopAuth) desktopAuth.classList.add('hidden');
-
-        if(mobileGuest) mobileGuest.classList.remove('hidden');
-        if(mobileAuth) mobileAuth.classList.add('hidden');
+        // Mostrar Invitados
+        desktopGuest.forEach(el => { el.classList.remove('hidden'); el.classList.add('flex'); });
+        mobileGuest.forEach(el => { el.classList.remove('hidden'); el.classList.add('inline-flex'); });
+        
+        // Ocultar Logueados
+        desktopAuth.forEach(el => { el.classList.remove('flex'); el.classList.add('hidden'); });
+        mobileAuth.forEach(el => { el.classList.remove('inline-flex'); el.classList.add('hidden'); });
     }
 
-    let isMenuOpen = false;
-
-    btnMenuMovil?.addEventListener('click', () => {
-        isMenuOpen = !isMenuOpen;
-        toggleMenu(isMenuOpen);
-    });
-
-    mobileLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            isMenuOpen = false;
-            toggleMenu(false);
-        });
-    });
-
-    function toggleMenu(open) {
-        if (open) {
-            menuMovil.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-10px]');
-            menuMovil.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
-            
-            iconMenu.classList.remove('fa-bars');
-            iconMenu.classList.add('fa-xmark');
-            
-            document.body.style.overflow = 'hidden';
-        } else {
-            menuMovil.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
-            menuMovil.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-10px]');
-            
-            iconMenu.classList.remove('fa-xmark');
-            iconMenu.classList.add('fa-bars');
-
-            document.body.style.overflow = '';
-        }
-    }
-
+    // Lógica de Cierre de Sesión
     const handleLogout = async (e) => { 
         e.preventDefault();
 
@@ -91,22 +62,19 @@ document.addEventListener('DOMContentLoaded', () => {
             if (response.ok) {
                 localStorage.removeItem('userToken');
                 localStorage.removeItem('theme'); 
-
-                window.location.href = '/'; 
+                window.location.href = '/iniciar-sesion'; 
             } else {
                 console.error("Error al cerrar sesión en el servidor");
-                alert("Hubo un problema al cerrar la sesión. Intenta nuevamente.");
             }
         } catch (error) {
             console.error("Error de red al intentar cerrar sesión:", error);
-            alert("Error de conexión. No se pudo cerrar la sesión.");
         }
     };
 
     if(btnLogoutDesktop) btnLogoutDesktop.addEventListener('click', handleLogout);
     if(btnLogoutMobile) btnLogoutMobile.addEventListener('click', handleLogout);
 
-
+    // Efecto de Navbar al hacer scroll
     window.addEventListener('scroll', () => {
         const nav = document.getElementById('main-navbar');
         if (window.scrollY > 10) {

@@ -36,7 +36,7 @@
 </head>
 
 <body
-    class="flex flex-col min-h-screen bg-pattern bg-lightbg text-primary dark:bg-gray-900 dark:text-neutralgray transition-colors duration-500 pt-20">
+    class="flex flex-col min-h-screen bg-pattern bg-lightbg text-primary dark:bg-gray-900 dark:text-neutralgray transition-colors duration-500 pt-0">
 
     <%- include('./partials/navbar.ejs') %>
         <div class="fixed inset-0 bg-lightbg/80 dark:bg-gray-900/90 -z-10 pointer-events-none"></div>
@@ -101,7 +101,7 @@
                         <div class="hidden md:block md:col-span-5 relative">
                             <div
                                 class="relative rounded-2xl overflow-hidden shadow-2xl rotate-2 border-4 border-white dark:border-gray-700">
-                                <img src="/assets/teamArtelu.jpeg" alt="Nosotros ArteLu"
+                                <img src="/assets/arteluteam.png" alt="Nosotros ArteLu"
                                     class="w-full h-auto object-cover grayscale hover:grayscale-0 transition-all duration-500">
                             </div>
                         </div>
@@ -165,7 +165,8 @@
             </section>
 
             <script>
-                window.datosClases = <%- JSON.stringify(disciplinas || []) %>
+                window.datosClases = <%- JSON.stringify(disciplinas || []) %>;
+                
             </script>
 
             <section id="clases" class="bg-neutralgray dark:bg-gray-800 py-28 px-6">
@@ -271,12 +272,12 @@
             </section>
 
             <!-- Elfsight AI Chatbot | Untitled AI Chatbot -->
-            <script src="https://elfsightcdn.com/platform.js" async></script>
-            <div class="elfsight-app-fba2c842-93e3-4d91-be23-45234b1815aa" data-elfsight-app-lazy></div>
+            <!-- <script src="https://elfsightcdn.com/platform.js" async></script>
+            <div class="elfsight-app-fba2c842-93e3-4d91-be23-45234b1815aa" data-elfsight-app-lazy></div> -->
 
             <button id="openModal"
-                class="fixed bottom-20 right-166 md:bottom-28 md:right-6 bg-gradient-to-r from-highlight to-primary hover:from-secondary hover:to-primary text-white shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 px-6 py-4 rounded-full flex items-center gap-3 group animate-bounce-slow">
-                <span class="text-lg font-bold tracking-wide">Reserva tu Clase Ahora</span>
+                class="fixed bottom-10 right-100 md:bottom-28 md:right-6 bg-gradient-to-r from-highlight to-primary hover:from-secondary hover:to-primary text-white shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 px-2 py-2 rounded-full flex items-center gap-3 group animate-bounce-slow">
+                <span class="text-lg font-bold tracking-wide">Agenda Ahora</span>
                 <div class="bg-white/20 p-2 rounded-full group-hover:rotate-45 transition-transform">
                     <i class="fa-solid fa-calendar-check text-xl"></i>
                 </div>
