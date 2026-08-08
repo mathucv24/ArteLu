@@ -2,17 +2,19 @@ import bycrypt from 'bcryptjs';
 import Usuario from '../models/usuario.js';
 import jwt from 'jsonwebtoken';
 import Pago from '../models/pago.js';
-import nodemailer from 'nodemailer';
+// import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 
-const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS 
-    }
-});
+// const transporter = nodemailer.createTransport({
+//     host: 'smtp.gmail.com',
+//     port: 465,
+//     secure: true,
+//     auth: {
+//         user: process.env.EMAIL_USER,
+//         pass: process.env.EMAIL_PASS 
+//     }
+// });
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const registrarUsuario = async (req, res) => {
     try {
@@ -114,11 +116,18 @@ const registrarUsuario = async (req, res) => {
         await Usuario.create(nuevoUsuario);
        
 
-        await transporter.sendMail({
-            from: '"ArteLu Academia de Deportes Aereos" <arteluaerial@gmail.com>',
+        // await transporter.sendMail({
+        //     from: '"ArteLu Academia de Deportes Aereos" <arteluaerial@gmail.com>',
+        //     to: email,
+        //     subject: "Código de Verificación - ArteLu",
+        //     text: `<b>Tu código de verificación es: ${codigo}. Gracias por atreverte a volar!`,
+        //     html: htmlContent
+        // });
+
+        await resend.emails.send({
+            from: 'ArteLu Academia <hola@arteluaerial.com>',
             to: email,
             subject: "Código de Verificación - ArteLu",
-            text: `<b>Tu código de verificación es: ${codigo}. Gracias por atreverte a volar!`,
             html: htmlContent
         });
 
@@ -333,8 +342,22 @@ const solicitarRecuperacion = async (req, res) => {
         usuario.codigoRecuperacion = codigo;
         await usuario.save();
 
-        await transporter.sendMail({
-            from: '"ArteLu Academia de Deportes Aereos" <arteluaerial@gmail.com>',
+        // await transporter.sendMail({
+        //     from: '"ArteLu Academia de Deportes Aereos" <arteluaerial@gmail.com>',
+        //     to: email,
+        //     subject: "Recuperación de Contraseña - ArteLu",
+        //     html: `
+        //         <div style="font-family: sans-serif; padding: 20px;">
+        //             <h2>Recupera tu acceso</h2>
+        //             <p>Usa el siguiente código para restablecer tu contraseña:</p>
+        //             <h1 style="color: #52054d; letter-spacing: 5px;">${codigo}</h1>
+        //             <p>Si no solicitaste esto, ignora este mensaje.</p>
+        //         </div>
+        //     `
+        // });
+
+        await resend.emails.send({
+            from: 'ArteLu Academia <hola@arteluaerial.com>', 
             to: email,
             subject: "Recuperación de Contraseña - ArteLu",
             html: `
